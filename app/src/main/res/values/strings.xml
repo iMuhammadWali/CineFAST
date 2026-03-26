@@ -17,4 +17,8 @@
     <string name="snack_quantity">0</string>
     <string name="snack_increase">+</string>
     <string name="snack_image_content_description">Snack Image</string>
+    <string name="splash_app_logo_content_description">Application Logo</string>
+    <string name="ticket_summary_title">Ticket Summary</string>
+    <string name="movie_playing_details">ScreenX Dolby Atmos</string>
+    <string name="ticket_summary_button_text">Send Ticket</string>
 </resources>

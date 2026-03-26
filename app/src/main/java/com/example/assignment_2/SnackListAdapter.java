@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 
 import java.util.List;
 
@@ -35,10 +36,31 @@ public class SnackListAdapter extends ArrayAdapter<Snack> {
         TextView tvSnackName = snackView.findViewById(R.id.tvSnackName);
         TextView tvSnackDetails = snackView.findViewById(R.id.tvSnackDetails);
         ImageView ivSnackImage = snackView.findViewById(R.id.ivSnackImage);
+        TextView tvPrice = snackView.findViewById(R.id.tvPrice);
+        AppCompatButton btnIncrease, btnDecrease;
+        btnIncrease = snackView.findViewById(R.id.btnIncrease);
+        btnDecrease = snackView.findViewById(R.id.btnDecrease);
+        TextView tvQuantity = snackView.findViewById(R.id.tvQuantity);
+
 
         tvSnackName.setText(snack.getName());
         tvSnackDetails.setText(snack.getDetails());
         ivSnackImage.setImageResource(snack.getImageSrc());
+        tvPrice.setText(String.valueOf(snack.getPrice()));
+
+        btnIncrease.setOnClickListener((v)->{
+            int quantity = Integer.parseInt(String.valueOf(tvQuantity.getText()));
+            quantity++;
+            tvQuantity.setText(String.valueOf(quantity));
+        });
+
+        btnDecrease.setOnClickListener((v)->{
+            int quantity = Integer.parseInt(String.valueOf(tvQuantity.getText()));
+            if (quantity == 0) return;
+            quantity--;
+            tvQuantity.setText(String.valueOf(quantity));
+        });
+
         return snackView;
     }
 }

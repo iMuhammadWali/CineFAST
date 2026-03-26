@@ -23,19 +23,29 @@ public class ChooseSeatsFragment extends Fragment {
     TextView tvMovieTitle;
     AppCompatButton btnBack, btnBookSeats, btnProceedToSnacks;
     GridLayout glSeating;
-    ArrayList<String> selectedSeats = new ArrayList<>();
-    private static final String arg1 = "title";
-    private static final String arg2 = "isComingSoon";
+    ArrayList<String> selectedSeats;
+    Movie movie;
+    private static final String ARG_PARAM1 = "movie";
 
     // Methods
-    public static ChooseSeatsFragment newInstance(Movie m) {
+    public static ChooseSeatsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
-        args.putString(arg1, m.getTitle());
-        args.putBoolean(arg2, m.getIsComingSoon());
+        args.putSerializable(ARG_PARAM1, movie);
         ChooseSeatsFragment fragment = new ChooseSeatsFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null){
+            movie = (Movie) args.getSerializable(ARG_PARAM1);
+        }
+        selectedSeats = new ArrayList<>();
+    }
+
     public ChooseSeatsFragment() {
         // Required empty public constructor
     }
@@ -45,30 +55,33 @@ public class ChooseSeatsFragment extends Fragment {
         glSeating = v.findViewById(R.id.glSeating);
         btnBookSeats = v.findViewById(R.id.btnBookSeats);
         btnProceedToSnacks = v.findViewById(R.id.btnProceedToSnacks);
-    }
-    private void setupUi(View v){
-        Bundle args = getArguments();
-        if (args != null){
-            String title = args.getString(arg1);
-            tvMovieTitle.setText(title);
-        }
+        v.findViewById(R.id.vBooked).setEnabled(false);
+        v.findViewById(R.id.vYours).setSelected(true);
 
-        btnBack.setOnClickListener((_v)-> requireActivity()
+    }
+    private void setupUi(View view){
+        tvMovieTitle.setText(movie.getTitle());
+        btnBack.setOnClickListener((v)-> requireActivity()
                 .getSupportFragmentManager()
                 .popBackStack());
 
-
-        btnProceedToSnacks.setOnClickListener((_v)->{
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fContainer, new ChooseSnacksFragment())
+        btnProceedToSnacks.setOnClickListener((v)->{
+            ChooseSnacksFragment fragment = ChooseSnacksFragment.newInstance(movie, selectedSeats);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fContainer, fragment)
                     .addToBackStack(null)
                     .commit();
         });
 
-        // Give colors to the helper views.
-        v.findViewById(R.id.vBooked).setEnabled(false);
-        v.findViewById(R.id.vYours).setSelected(true);
-
+        btnBookSeats.setOnClickListener((v)->{
+            TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, null);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fContainer, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
         createSeatsGrid();
     }
     private int dpToPx(int dp) {
@@ -113,7 +126,6 @@ public class ChooseSeatsFragment extends Fragment {
             }
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -125,10 +137,5 @@ public class ChooseSeatsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         setupUi(view);
-    }
-
-    public interface ChooseSeatsClickListener{
-        public void onChooseSeatsBookSeatsClick(ArrayList<String> selectedSeats);
-        public void onChooseSeatsProceedToSnacksClick(ArrayList<String> selectedSeats);
     }
 }

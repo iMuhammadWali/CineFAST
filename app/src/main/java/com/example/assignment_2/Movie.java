@@ -2,7 +2,9 @@ package com.example.assignment_2;
 
 import android.graphics.drawable.Drawable;
 
-public class Movie {
+import java.io.Serializable;
+
+public class Movie implements Serializable {
     int posterSrc;
     String title;
     String genre;
