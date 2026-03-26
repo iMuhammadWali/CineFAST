@@ -37,6 +37,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie m = movies.get(position);
+        if (m.isComingSoon){
+            holder.btnBookSeats.setEnabled(false);
+        }
         holder.tvMovieTitle.setText(m.getTitle());
         holder.tVMovieGenre.setText(m.getGenre());
         holder.ivMoviePoster.setImageResource(m.getPosterSrc());
@@ -44,6 +47,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.btnBookSeats.setOnClickListener(v -> {
             context.onBookSeatsClick(m);
         });
+
     }
 
     @Override

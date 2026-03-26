@@ -8,6 +8,7 @@ public class Movie {
     String genre;
     String trailerLink;
     String date;
+    boolean isComingSoon;
     public int getPosterSrc(){
         return posterSrc;
     }
@@ -35,10 +36,11 @@ public class Movie {
         this.trailerLink = trailerLink;
     }
 
-    public Movie(int posterSrc, String title, String genre, String trailerLink) {
+    public Movie(int posterSrc, String title, String genre, String trailerLink, boolean isComingSoon) {
         this.posterSrc = posterSrc;
         this.title = title;
         this.genre = genre;
         this.trailerLink = trailerLink;
+        this.isComingSoon = isComingSoon;
     }
 }

@@ -30,10 +30,10 @@ public class NowShowingFragment extends Fragment {
         return v;
     }
     private void populateMovies(){
-        movies.add(new Movie(R.drawable.movie_detective_conan,"Detective Conan: One-Eyed Flashback", "Action / Mystery", "No Link"));
-        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "No Link"));
-        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "No Link"));
-        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "No Link"));
+        movies.add(new Movie(R.drawable.movie_detective_conan,"Detective Conan: One-Eyed Flashback", "Action / Mystery", "No Link", false));
+        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "No Link", false));
+        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "No Link", false));
+        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "No Link", false));
     }
     private void init(View v){
         rv = v.findViewById(R.id.rv);
