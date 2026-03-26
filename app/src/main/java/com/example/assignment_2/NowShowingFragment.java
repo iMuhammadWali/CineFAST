@@ -9,14 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class NowShowingFragment extends Fragment {
     RecyclerView rv;
     ArrayList<Movie> movies;
-    MovieAdapter adapter;
+    MovieListAdapter adapter;
     public NowShowingFragment() {
         // Required empty public constructor
     }
@@ -41,7 +40,7 @@ public class NowShowingFragment extends Fragment {
 
         movies = new ArrayList<>();
         populateMovies();
-        adapter = new MovieAdapter(requireActivity(), movies);
+        adapter = new MovieListAdapter(requireActivity(), movies);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         rv.setAdapter(adapter);
     }

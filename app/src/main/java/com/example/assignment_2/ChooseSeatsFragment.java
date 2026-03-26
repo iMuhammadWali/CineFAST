@@ -11,20 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 // TODO: Understand the lifecycle of Fragment
+// TODO: Make the screen work for isComingSoonMovies
 public class ChooseSeatsFragment extends Fragment {
+    // Hooks and Attributes
     TextView tvMovieTitle;
     AppCompatButton btnBack;
     GridLayout glSeating;
     ArrayList<String> selectedSeats = new ArrayList<>();
+    private static final String arg1 = "title";
+    private static final String arg2 = "isComingSoon";
+
+    // Methods
     public static ChooseSeatsFragment newInstance(Movie m) {
         Bundle args = new Bundle();
-        args.putString("Title", m.getTitle());
+        args.putString(arg1, m.getTitle());
+        args.putBoolean(arg2, m.getIsComingSoon());
         ChooseSeatsFragment fragment = new ChooseSeatsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -32,32 +38,21 @@ public class ChooseSeatsFragment extends Fragment {
     public ChooseSeatsFragment() {
         // Required empty public constructor
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_seats, container, false);
-    }
-
     private void init(View v){
         tvMovieTitle = v.findViewById(R.id.tvMovieTitle);
         btnBack = v.findViewById(R.id.btnBack);
         glSeating = v.findViewById(R.id.glSeating);
     }
-
     private void setupUi(View v){
         Bundle args = getArguments();
         if (args != null){
-            String title = args.getString("Title");
+            String title = args.getString(arg1);
             tvMovieTitle.setText(title);
         }
 
-        btnBack.setOnClickListener((_v)->{
-            requireActivity()
-                    .getSupportFragmentManager()
-                    .popBackStack();
-        });
+        btnBack.setOnClickListener((_v)-> requireActivity()
+                .getSupportFragmentManager()
+                .popBackStack());
 
         // Give colors to the helper views.
         v.findViewById(R.id.vBooked).setEnabled(false);
@@ -109,10 +104,21 @@ public class ChooseSeatsFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_choose_seats, container, false);
+    }
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         setupUi(view);
     }
 
+    public interface ChooseSeatsClickListener{
+        public void onChooseSeatsBookSeatsClick(ArrayList<String> selectedSeats){
+
+        }
+    }
 }

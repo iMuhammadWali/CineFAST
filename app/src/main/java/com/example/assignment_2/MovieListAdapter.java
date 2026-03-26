@@ -1,28 +1,23 @@
 package com.example.assignment_2;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    OnMovieClickListener context;
+public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
+    OnHomeMovieClickListener context;
     ArrayList<Movie> movies;
-    public MovieAdapter(Activity context, ArrayList<Movie> movies){
-        this.context = (OnMovieClickListener) context;
+    public MovieListAdapter(Activity context, ArrayList<Movie> movies){
+        this.context = (OnHomeMovieClickListener) context;
         this.movies = movies;
     }
 
@@ -37,19 +32,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie m = movies.get(position);
-        if (m.isComingSoon){
-            holder.btnBookSeats.setEnabled(false);
-            holder.btnBookSeats.setVisibility(View.GONE);
-        }
         holder.tvMovieTitle.setText(m.getTitle());
         holder.tVMovieGenre.setText(m.getGenre());
         holder.ivMoviePoster.setImageResource(m.getPosterSrc());
 
         holder.btnBookSeats.setOnClickListener(v -> {
-            context.onBookSeatsClick(m);
+            context.onHomeBookSeatsClick(m);
         });
         holder.btnTrailer.setOnClickListener((v)->{
-            context.onTrailerClick(m);
+            context.onHomeTrailerClick(m);
         });
     }
 
@@ -73,8 +64,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 
-    public interface OnMovieClickListener {
-        void onBookSeatsClick(Movie m);
-        void onTrailerClick(Movie m);
+    public interface OnHomeMovieClickListener {
+        void onHomeBookSeatsClick(Movie m);
+        void onHomeTrailerClick(Movie m);
     }
 }

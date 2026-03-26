@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class ComingSoonFragment extends Fragment {
     RecyclerView rv;
     ArrayList<Movie> movies;
-    MovieAdapter adapter;
+    MovieListAdapter adapter;
     public ComingSoonFragment() {
         // Required empty public constructor
     }
@@ -39,7 +39,7 @@ public class ComingSoonFragment extends Fragment {
 
         movies = new ArrayList<>();
         populateMovies();
-        adapter = new MovieAdapter(requireActivity(), movies);
+        adapter = new MovieListAdapter(requireActivity(), movies);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         rv.setAdapter(adapter);
     }

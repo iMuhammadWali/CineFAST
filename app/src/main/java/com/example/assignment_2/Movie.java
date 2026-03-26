@@ -36,6 +36,9 @@ public class Movie {
         this.trailerLink = trailerLink;
     }
 
+    public boolean getIsComingSoon(){
+        return isComingSoon;
+    }
     public Movie(int posterSrc, String title, String genre, String trailerLink, boolean isComingSoon) {
         this.posterSrc = posterSrc;
         this.title = title;
