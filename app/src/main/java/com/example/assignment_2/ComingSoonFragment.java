@@ -29,10 +29,9 @@ public class ComingSoonFragment extends Fragment {
         return v;
     }
     private void populateMovies(){
-        movies.add(new Movie(R.drawable.movie_detective_conan_coming_soon,"Detective Conan: Fallen Angel of the Highway", "Action / Mystery", "No Link", true));
-        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "No Link", true));
-        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "No Link", true));
-        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "No Link", true));
+        movies.add(new Movie(R.drawable.movie_detective_conan_coming_soon,"Detective Conan: Fallen Angel of the Highway", "Action / Mystery", "https://youtu.be/Lrc1GAMTFnc?si=vbFl-fYnJLcH2ZP5", true));
+        movies.add(new Movie(R.drawable.movie_slime_coming_soon,"That Time I Got Reincarnated as a Slime the Movie: Tears of the Azure Sea", "Action / Comedy", "https://youtu.be/RBJL4B0abpI?si=LeAzTpuuJ5oJv45y", true));
+        movies.add(new Movie(R.drawable.movie_sound_euphonium_coming_soon,"Sound! Euphonium The Final Movie Part 1", "Action", "https://youtu.be/cC3aGvKZ7U4?si=g3_gZvcjpP1HdnxH", true));
     }
     private void init(View v){
         rv = v.findViewById(R.id.rv);

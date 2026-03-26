@@ -1,5 +1,7 @@
 package com.example.assignment_2;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.OnMo
 
     @Override
     public void onTrailerClick(Movie m) {
-
+        String link = m.trailerLink;
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
     }
 }

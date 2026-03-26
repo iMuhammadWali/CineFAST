@@ -48,7 +48,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.btnBookSeats.setOnClickListener(v -> {
             context.onBookSeatsClick(m);
         });
-
+        holder.btnTrailer.setOnClickListener((v)->{
+            context.onTrailerClick(m);
+        });
     }
 
     @Override
