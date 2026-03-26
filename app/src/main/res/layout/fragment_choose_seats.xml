@@ -170,6 +170,6 @@
             android:textAllCaps="false"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:id="@+id/btnSnacks"/>
+            android:id="@+id/btnProceedToSnacks"/>
     </LinearLayout>
 </LinearLayout>

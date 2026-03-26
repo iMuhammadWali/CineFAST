@@ -9,9 +9,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class ChooseSnacksFragment extends Fragment {
-
+    ListView lv;
+    private ArrayList<Snack> snacks;
+    private SnackListAdapter adapter;
+    private ArrayList<ArrayList<String>> selectedSnacks;
     public ChooseSnacksFragment() {
         // Required empty public constructor
     }
@@ -25,5 +31,11 @@ public class ChooseSnacksFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        lv = view.findViewById(R.id.lv);
+        snacks = new ArrayList<>();
+        snacks.add(new Snack(R.drawable.snacks_popcorn, "Popcorn", "Large / Buttered", 8.99f));
+        adapter = new SnackListAdapter(requireActivity(), snacks);
+        lv.setAdapter(adapter);
     }
 }

@@ -10,4 +10,11 @@
     <string name="now_showing_select_date">Select Date</string>
     <string name="now_showing_today">Today</string>
     <string name="now_showing_tomorrow">Tomorrow</string>
+    <string name="snack_name">Snack Name</string>
+    <string name="snack_details">Details</string>
+    <string name="snack_price">Price</string>
+    <string name="snack_decrease">-</string>
+    <string name="snack_quantity">0</string>
+    <string name="snack_increase">+</string>
+    <string name="snack_image_content_description">Snack Image</string>
 </resources>

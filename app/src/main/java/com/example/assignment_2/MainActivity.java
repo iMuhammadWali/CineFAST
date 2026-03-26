@@ -11,8 +11,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.ArrayList;
+
 // To pass data to choose seats fragment, I will have to load that fragment here in this activity.
-public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnHomeMovieClickListener {
+public class MainActivity extends AppCompatActivity implements MovieListAdapter.OnHomeMovieClickListener, ChooseSeatsFragment.ChooseSeatsClickListener {
     private FragmentManager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,5 +49,15 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     public void onHomeTrailerClick(Movie m) {
         String link = m.trailerLink;
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+    }
+
+    @Override
+    public void onChooseSeatsBookSeatsClick(ArrayList<String> selectedSeats) {
+
+    }
+
+    @Override
+    public void onChooseSeatsProceedToSnacksClick(ArrayList<String> selectedSeats) {
+
     }
 }

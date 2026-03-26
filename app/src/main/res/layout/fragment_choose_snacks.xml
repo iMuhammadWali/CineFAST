@@ -5,7 +5,36 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment"
     android:background="@color/black"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_title"
+        tools:ignore="ContentDescription"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Items"
+        android:textSize="12sp"
+        android:fontFamily="@font/poppins"
+        android:layout_marginTop="17dp"
+        >
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Snacks and Drinks"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        >
+    </TextView>
 
     <ListView
         android:layout_width="match_parent"

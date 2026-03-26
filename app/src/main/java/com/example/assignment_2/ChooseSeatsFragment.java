@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class ChooseSeatsFragment extends Fragment {
     // Hooks and Attributes
     TextView tvMovieTitle;
-    AppCompatButton btnBack;
+    AppCompatButton btnBack, btnBookSeats, btnProceedToSnacks;
     GridLayout glSeating;
     ArrayList<String> selectedSeats = new ArrayList<>();
     private static final String arg1 = "title";
@@ -42,6 +43,8 @@ public class ChooseSeatsFragment extends Fragment {
         tvMovieTitle = v.findViewById(R.id.tvMovieTitle);
         btnBack = v.findViewById(R.id.btnBack);
         glSeating = v.findViewById(R.id.glSeating);
+        btnBookSeats = v.findViewById(R.id.btnBookSeats);
+        btnProceedToSnacks = v.findViewById(R.id.btnProceedToSnacks);
     }
     private void setupUi(View v){
         Bundle args = getArguments();
@@ -53,6 +56,14 @@ public class ChooseSeatsFragment extends Fragment {
         btnBack.setOnClickListener((_v)-> requireActivity()
                 .getSupportFragmentManager()
                 .popBackStack());
+
+
+        btnProceedToSnacks.setOnClickListener((_v)->{
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fContainer, new ChooseSnacksFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         // Give colors to the helper views.
         v.findViewById(R.id.vBooked).setEnabled(false);
@@ -117,8 +128,7 @@ public class ChooseSeatsFragment extends Fragment {
     }
 
     public interface ChooseSeatsClickListener{
-        public void onChooseSeatsBookSeatsClick(ArrayList<String> selectedSeats){
-
-        }
+        public void onChooseSeatsBookSeatsClick(ArrayList<String> selectedSeats);
+        public void onChooseSeatsProceedToSnacksClick(ArrayList<String> selectedSeats);
     }
 }
