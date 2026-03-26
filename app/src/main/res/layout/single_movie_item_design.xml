@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/app_rounded_grey_tile"
+    android:layout_marginBottom="15dp"
+    android:padding="10dp">
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:contentDescription="@string/movie_image_content_description"
+        android:src="@null"
+        android:id="@+id/ivMoviePoster"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/movie_title"
+         android:textColor="@color/white"
+         android:fontFamily="@font/poppins"
+         android:textStyle="bold"
+         android:id="@+id/tvMovieTitle"
+         />
+     <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/movie_genre"
+         android:id="@+id/tvMovieGenre"
+         />
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="10dp"
+         >
+         <androidx.appcompat.widget.AppCompatButton
+             android:layout_width="0dp"
+             android:layout_height="40dp"
+             android:layout_weight="1"
+             android:background="@drawable/app_red_button"
+             android:text="@string/movie_book_seats_button"
+             android:textColor="@color/white"
+             android:textAllCaps="false"
+             android:textStyle="bold"
+             android:id="@+id/btnBookSeats"/>
+         <View
+             android:layout_width="10dp"
+             android:layout_height="1dp" />
+
+         <androidx.appcompat.widget.AppCompatButton
+             android:layout_width="0dp"
+             android:layout_height="40dp"
+             android:layout_weight="1"
+             android:background="@drawable/app_white_button"
+             android:text="@string/movie_trailer_button"
+             android:textColor="@color/black"
+             android:textAllCaps="false"
+             android:textStyle="bold"
+             android:id="@+id/btnTrailer"/>
+<!--                    Linear Layout for buttons-->
+        </LinearLayout>
+<!--                Linear Layout for information-->
+     </LinearLayout>
+<!--            The outermost parent Linear layout -->
+</LinearLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Assignment_2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="movie_image_content_description">Movie Poster</string>
+    <string name="movie_title">Movie Title</string>
+    <string name="movie_genre">Genre</string>
+    <string name="movie_book_seats_button">Book Seats</string>
+    <string name="movie_trailer_button">Trailer</string>
+    <string name="now_showing_select_date">Select Date</string>
+    <string name="now_showing_today">Today</string>
+    <string name="now_showing_tomorrow">Tomorrow</string>
+</resources>

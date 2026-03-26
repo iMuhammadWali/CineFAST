@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeFragment"
+    android:background="@color/black"
+    android:paddingHorizontal="15dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/app_title"
+        tools:ignore="ContentDescription"/>
+
+<!--    There will be two tabs here. -->
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tl"
+        android:background="@color/black"
+        app:tabTextColor="#AAAAAA"
+        app:tabTextAppearance="@style/TabTextStyle"
+        app:tabIndicatorColor="#EE0000"
+        app:tabRippleColor="@null"
+        app:tabPaddingBottom="10dp"
+        android:layout_marginBottom="15dp" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/vp2" />
+
+</LinearLayout>
