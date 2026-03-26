@@ -39,6 +39,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie m = movies.get(position);
         if (m.isComingSoon){
             holder.btnBookSeats.setEnabled(false);
+            holder.btnBookSeats.setVisibility(View.GONE);
         }
         holder.tvMovieTitle.setText(m.getTitle());
         holder.tVMovieGenre.setText(m.getGenre());

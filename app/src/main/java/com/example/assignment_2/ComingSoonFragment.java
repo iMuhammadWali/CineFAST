@@ -29,16 +29,16 @@ public class ComingSoonFragment extends Fragment {
         return v;
     }
     private void populateMovies(){
-        movies.add(new Movie(R.drawable.movie_detective_conan,"Detective Conan: One-Eyed Flashback", "Action / Mystery", "No Link", false));
-        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "No Link", false));
-        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "No Link", false));
-        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "No Link", false));
+        movies.add(new Movie(R.drawable.movie_detective_conan_coming_soon,"Detective Conan: Fallen Angel of the Highway", "Action / Mystery", "No Link", true));
+        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "No Link", true));
+        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "No Link", true));
+        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "No Link", true));
     }
     private void init(View v){
         rv = v.findViewById(R.id.rv);
         rv.setHasFixedSize(true);
 
-        movies = MyApplication.nowShowingMovies;
+        movies = new ArrayList<>();
         populateMovies();
         adapter = new MovieAdapter(requireActivity(), movies);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));

@@ -39,7 +39,7 @@ public class NowShowingFragment extends Fragment {
         rv = v.findViewById(R.id.rv);
         rv.setHasFixedSize(true);
 
-        movies = MyApplication.nowShowingMovies;
+        movies = new ArrayList<>();
         populateMovies();
         adapter = new MovieAdapter(requireActivity(), movies);
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
