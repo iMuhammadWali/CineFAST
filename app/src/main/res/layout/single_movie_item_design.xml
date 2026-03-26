@@ -6,7 +6,6 @@
     android:background="@drawable/app_rounded_grey_tile"
     android:layout_marginBottom="15dp"
     android:padding="10dp">
-
     <ImageView
         android:layout_width="80dp"
         android:layout_height="100dp"
