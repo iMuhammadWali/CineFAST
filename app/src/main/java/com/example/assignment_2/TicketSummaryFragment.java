@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class TicketSummaryFragment extends Fragment {
     private static final String ARG_PARAM3 = "selectedSnacks";
     TextView tvMovieTitle;
     ImageView ivMoviePoster;
+    TextView tvTicketsList;
     private Movie movie;
     private ArrayList<String> selectedSeats;
     private ArrayList<ArrayList<String>> selectedSnacks;
@@ -33,8 +35,11 @@ public class TicketSummaryFragment extends Fragment {
         TicketSummaryFragment fragment = new TicketSummaryFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, movie);
+//        if (seats == null){
+//            Toast.makeText(fragment.requireContext(), "DAMN", Toast.LENGTH_SHORT).show();
+//        }
         args.putStringArrayList(ARG_PARAM2, seats);
-        args.putSerializable(ARG_PARAM2, snacks);
+        args.putSerializable(ARG_PARAM3, snacks);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +51,7 @@ public class TicketSummaryFragment extends Fragment {
         if (args != null){
             movie = (Movie) args.getSerializable(ARG_PARAM1);
             selectedSeats = args.getStringArrayList(ARG_PARAM2);
+
             selectedSnacks =
                     (ArrayList<ArrayList<String>>) getArguments().getSerializable(ARG_PARAM3);        }
     }
@@ -59,16 +65,27 @@ public class TicketSummaryFragment extends Fragment {
     private void init(View view){
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         ivMoviePoster = view.findViewById(R.id.ivMoviePoster);
+        tvTicketsList = view.findViewById(R.id.tvTicketsList);
+
     }
     private void setupUi(){
         tvMovieTitle.setText(movie.getTitle());
         ivMoviePoster.setImageResource(movie.getPosterSrc());
+        if (selectedSeats != null){
+            StringBuilder htmlText = new StringBuilder(); // Accumulate HTML here
+            int pricePerSeat = 16;
+            for (String seat : selectedSeats) {
+                htmlText.append(seat).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append("<b>").append(pricePerSeat).append(" USD </b><br/>");        }
+
+            tvTicketsList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
+        };
+
+        //TODO: Add Snacks here by using that 2D ArrayList
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         setupUi();
-
     }
 }

@@ -112,7 +112,8 @@ public class ChooseSeatsFragment extends Fragment {
                     v.setEnabled(false);
                 }
                 v.setBackgroundResource(R.drawable.app_choose_seats_seat);
-
+                String seatName = "Row " + (i + 1) + " Seat " + (j + 1);
+                v.setTag(seatName);
                 v.setOnClickListener(clickedView -> {
                     String seat = (String) clickedView.getTag();
                     if (clickedView.isSelected()) {
