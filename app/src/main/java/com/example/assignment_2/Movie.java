@@ -7,7 +7,7 @@ public class Movie {
     String title;
     String genre;
     String trailerLink;
-
+    String date;
     public int getPosterSrc(){
         return posterSrc;
     }

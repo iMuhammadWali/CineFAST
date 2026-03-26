@@ -19,17 +19,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    Activity context;
+    OnMovieClickListener context;
     ArrayList<Movie> movies;
     public MovieAdapter(Activity context, ArrayList<Movie> movies){
-        this.context = (Activity) context;
+        this.context = (OnMovieClickListener) context;
         this.movies = movies;
     }
 
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context)
+        View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.single_movie_item_design, parent, false);
         return new MovieViewHolder(v);
     }
@@ -42,13 +42,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.ivMoviePoster.setImageResource(m.getPosterSrc());
 
         holder.btnBookSeats.setOnClickListener(v -> {
-            Toast.makeText(context, "Book Seats Button is Clicked", Toast.LENGTH_SHORT).show();
-            AppCompatActivity activity = (AppCompatActivity) context;
-            activity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fContainer, new ChooseSeatsFragment())
-                    .addToBackStack(null)
-                    .commit();
+            context.onBookSeatsClick(m);
         });
     }
 
@@ -69,10 +63,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             btnBookSeats = itemView.findViewById(R.id.btnBookSeats);
             btnTrailer = itemView.findViewById(R.id.btnTrailer);
 
-            btnBookSeats.setOnClickListener((v)->{
-                context.startActivity(new Intent(context, SplashActivity.class));
-                context.finish();
-            });
         }
+    }
+
+    public interface OnMovieClickListener {
+        void onBookSeatsClick(Movie m);
+        void onTrailerClick(Movie m);
     }
 }
