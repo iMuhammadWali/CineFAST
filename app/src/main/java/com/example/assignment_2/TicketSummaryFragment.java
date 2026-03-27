@@ -148,10 +148,10 @@ public class TicketSummaryFragment extends Fragment {
             emailIntent.setData(android.net.Uri.parse("mailto:"));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
             emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-
+            emailIntent.setPackage("com.google.android.gm");
             try {
-                startActivity(Intent.createChooser(emailIntent, "Send Confirmation Email..."));
-            } catch (android.content.ActivityNotFoundException ex) {
+                startActivity(emailIntent);
+            } catch (Exception e) {
                 Toast.makeText(requireContext(), "No email apps installed.", Toast.LENGTH_SHORT).show();
             }
         });
