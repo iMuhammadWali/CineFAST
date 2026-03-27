@@ -1,6 +1,8 @@
 package com.example.assignment_2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -75,12 +77,50 @@ public class TicketSummaryFragment extends Fragment {
         btnConfirm = view.findViewById(R.id.btnConfirm);
     }
     private void setupUi(){
+        float totalPrice = 0f;
+        tvMovieTitle.setText(movie.getTitle());
+        ivMoviePoster.setImageResource(movie.getPosterSrc());
+        if (selectedSeats != null){
+            StringBuilder htmlText = new StringBuilder(); // Accumulate HTML here
+            int pricePerSeat = 16;
+            for (String seat : selectedSeats) {
+                totalPrice += movie.getTicketPrice();
+                htmlText.append(seat).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append("<b>").append(pricePerSeat).append(" USD </b><br/>");
+            }
+
+            tvTicketsList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
+        }
+
+        if (selectedSnacks != null && !selectedSnacks.isEmpty()) {
+            tvSnacksHeading.setVisibility(View.VISIBLE);
+            tvSnacksList.setVisibility(View.VISIBLE);
+            StringBuilder htmlText = new StringBuilder();
+            for (SelectedSnack snack : selectedSnacks) {
+                totalPrice += snack.getTotalPrice();
+                htmlText.append("X").append(snack.getQuantity()).append(" ").append(snack.getName()).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append(snack.getTotalPrice()).append(" USD").append("</b><br/>");
+            }
+            tvSnacksList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
+        }
+        tvTotalPrice.setText(totalPrice + " USD");
+
+
+
         btnBack.setOnClickListener((v)->{
             requireActivity()
                     .getSupportFragmentManager()
                     .popBackStack();
         });
+
+        float finalTotalPrice = totalPrice;
         btnConfirm.setOnClickListener(v -> {
+            // Store the ticket using SharedPreferences
+            SharedPreferences prefs = requireActivity().getSharedPreferences("bookingPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("movieTitle", movie.getTitle());
+            editor.putInt("seatCount", selectedSeats.size());
+            editor.putFloat("totalPrice", finalTotalPrice);
+            editor.apply();
+
             String seatsText = (selectedSeats != null && !selectedSeats.isEmpty())
                     ? String.join(", ", selectedSeats)
                     : "None";
@@ -115,32 +155,6 @@ public class TicketSummaryFragment extends Fragment {
                 Toast.makeText(requireContext(), "No email apps installed.", Toast.LENGTH_SHORT).show();
             }
         });
-
-        float totalPrice = 0f;
-        tvMovieTitle.setText(movie.getTitle());
-        ivMoviePoster.setImageResource(movie.getPosterSrc());
-        if (selectedSeats != null){
-            StringBuilder htmlText = new StringBuilder(); // Accumulate HTML here
-            int pricePerSeat = 16;
-            for (String seat : selectedSeats) {
-                totalPrice += movie.getTicketPrice();
-                htmlText.append(seat).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append("<b>").append(pricePerSeat).append(" USD </b><br/>");
-            }
-
-            tvTicketsList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
-        }
-
-        if (selectedSnacks != null && !selectedSnacks.isEmpty()) {
-            tvSnacksHeading.setVisibility(View.VISIBLE);
-            tvSnacksList.setVisibility(View.VISIBLE);
-            StringBuilder htmlText = new StringBuilder();
-            for (SelectedSnack snack : selectedSnacks) {
-                totalPrice += snack.getTotalPrice();
-                htmlText.append("X").append(snack.getQuantity()).append(" ").append(snack.getName()).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append(snack.getTotalPrice()).append(" USD").append("</b><br/>");
-            }
-            tvSnacksList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
-        }
-        tvTotalPrice.setText(totalPrice + " USD");
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

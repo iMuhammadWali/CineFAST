@@ -20,7 +20,7 @@
     <string name="splash_app_logo_content_description">Application Logo</string>
     <string name="ticket_summary_title">Ticket Summary</string>
     <string name="movie_playing_details">ScreenX Dolby Atmos</string>
-    <string name="ticket_summary_button_text">Send Ticket</string>
+    <string name="ticket_summary_button_text">Confirm and Send Ticket</string>
 
     <string name="back">Back</string>
     <string name="booking_details">Booking details</string>
