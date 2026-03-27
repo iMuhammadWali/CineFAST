@@ -11,24 +11,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class ChooseSnacksFragment extends Fragment {
+public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.SnackOnClickListener {
     ListView lv;
     private ArrayList<Snack> snacks;
-    private SnackListAdapter adapter;
+    private Movie movie;
     private ArrayList<String> selectedSeats;
-    private ArrayList<ArrayList<String>> selectedSnacks;
+    private ArrayList<SelectedSnack> selectedSnacks;
+    private Map<String, Integer> snackQtyMap;
     private AppCompatButton btnConfirm;
     private static final String ARG_PARAM1 = "movie";
     private static final String ARG_PARAM2 = "selectedSeats";
-    public static ChooseSnacksFragment newInstance(Movie movie, ArrayList<String> seats){
+    public static ChooseSnacksFragment newInstance(Movie movie, ArrayList<String> selectedSeats){
         ChooseSnacksFragment fragment = new ChooseSnacksFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1,  movie);
-        args.putStringArrayList(ARG_PARAM2, seats);
+        args.putStringArrayList(ARG_PARAM2, selectedSeats);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,9 +53,16 @@ public class ChooseSnacksFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null){
-            selectedSeats = args.getStringArrayList(ARG_PARAM1);
+            movie = (Movie) args.getSerializable(ARG_PARAM1);
+            selectedSeats = args.getStringArrayList(ARG_PARAM2);
+        }
+        else {
+            // This line will never run though, because this fragment is displayed without arguments.
+            movie = null;
+            selectedSeats = new ArrayList<>();
         }
         snacks = new ArrayList<>();
+        snackQtyMap = new HashMap<>();
         populateSnacks();
     }
 
@@ -61,16 +75,25 @@ public class ChooseSnacksFragment extends Fragment {
     private void init(View view){
         lv = view.findViewById(R.id.lv);
         btnConfirm = view.findViewById(R.id.btnConfirm);
-        adapter = new SnackListAdapter(requireActivity(), snacks);
+        SnackListAdapter adapter = new SnackListAdapter(requireActivity(), this, snacks);
         lv.setAdapter(adapter);
     }
     private void setupUi(){
-        // TODO: Send selected Seats and Snacks to TicketSummaryFragment
         btnConfirm.setOnClickListener((v)->{
+            // Build selectedSnacks from the map.
+            for (Snack snack : snacks){
+                Integer quantity = snackQtyMap.get(snack.getName());
+                if (quantity != null && quantity > 0){
+                    SelectedSnack selectedSnack = new SelectedSnack(snack.getName(), snack.getPrice(), quantity);
+                    selectedSnacks.add(selectedSnack);
+                }
+            }
+
+            TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, selectedSnacks);
             requireActivity()
                     .getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fContainer, new TicketSummaryFragment())
+                    .replace(R.id.fContainer, fragment)
                     .addToBackStack(null)
                     .commit();
         });
@@ -80,5 +103,20 @@ public class ChooseSnacksFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         setupUi();;
+    }
+
+    @Override
+    public void onIncreaseClickListener(Snack snack, Integer quantity) {
+        snackQtyMap.put(snack.getName(), quantity);
+    }
+
+    @Override
+    public void onDecreaseClickListener(Snack snack, Integer quantity) {
+        if (quantity == 0){
+            snackQtyMap.remove(snack.getName());
+        }
+        else{
+            snackQtyMap.put(snack.getName(), quantity);
+        }
     }
 }

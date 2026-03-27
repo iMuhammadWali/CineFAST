@@ -11,6 +11,8 @@ public class Movie implements Serializable {
     String trailerLink;
     String date;
     boolean isComingSoon;
+
+    final float ticketPrice = 16.0f;
     public int getPosterSrc(){
         return posterSrc;
     }
@@ -40,6 +42,9 @@ public class Movie implements Serializable {
 
     public boolean getIsComingSoon(){
         return isComingSoon;
+    }
+    public float getTicketPrice() {
+        return ticketPrice;
     }
     public Movie(int posterSrc, String title, String genre, String trailerLink, boolean isComingSoon) {
         this.posterSrc = posterSrc;

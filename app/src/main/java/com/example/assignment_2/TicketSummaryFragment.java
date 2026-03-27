@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
 // If enough time, TODO: Use a ListView here for showing selected seats;
 public class TicketSummaryFragment extends Fragment {
     private static final String ARG_PARAM1 = "movie";
@@ -26,18 +25,15 @@ public class TicketSummaryFragment extends Fragment {
     TextView tvTicketsList;
     private Movie movie;
     private ArrayList<String> selectedSeats;
-    private ArrayList<ArrayList<String>> selectedSnacks;
+    private ArrayList<SelectedSnack> selectedSnacks;
 
     public TicketSummaryFragment() {
         // Required empty public constructor
     }
-    public static TicketSummaryFragment newInstance(Movie movie, ArrayList<String> seats, ArrayList<ArrayList<String>> snacks) {
+    public static TicketSummaryFragment newInstance(Movie movie, ArrayList<String> seats, ArrayList<SelectedSnack> snacks) {
         TicketSummaryFragment fragment = new TicketSummaryFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, movie);
-//        if (seats == null){
-//            Toast.makeText(fragment.requireContext(), "DAMN", Toast.LENGTH_SHORT).show();
-//        }
         args.putStringArrayList(ARG_PARAM2, seats);
         args.putSerializable(ARG_PARAM3, snacks);
         fragment.setArguments(args);
@@ -53,7 +49,8 @@ public class TicketSummaryFragment extends Fragment {
             selectedSeats = args.getStringArrayList(ARG_PARAM2);
 
             selectedSnacks =
-                    (ArrayList<ArrayList<String>>) getArguments().getSerializable(ARG_PARAM3);        }
+                    (ArrayList<SelectedSnack>) args.getSerializable(ARG_PARAM3);
+        }
     }
 
     @Override
@@ -66,7 +63,6 @@ public class TicketSummaryFragment extends Fragment {
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         ivMoviePoster = view.findViewById(R.id.ivMoviePoster);
         tvTicketsList = view.findViewById(R.id.tvTicketsList);
-
     }
     private void setupUi(){
         tvMovieTitle.setText(movie.getTitle());

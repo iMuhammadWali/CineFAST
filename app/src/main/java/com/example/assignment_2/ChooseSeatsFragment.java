@@ -65,15 +65,6 @@ public class ChooseSeatsFragment extends Fragment {
                 .getSupportFragmentManager()
                 .popBackStack());
 
-        btnProceedToSnacks.setOnClickListener((v)->{
-            ChooseSnacksFragment fragment = ChooseSnacksFragment.newInstance(movie, selectedSeats);
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fContainer, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-
         btnBookSeats.setOnClickListener((v)->{
             TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, null);
             requireActivity().getSupportFragmentManager()
@@ -82,6 +73,18 @@ public class ChooseSeatsFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+        btnBookSeats.setEnabled(false);
+
+        btnProceedToSnacks.setOnClickListener((v)->{
+            ChooseSnacksFragment fragment = ChooseSnacksFragment.newInstance(movie, selectedSeats);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fContainer, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+        btnProceedToSnacks.setEnabled(false);
+
         createSeatsGrid();
     }
     private int dpToPx(int dp) {
@@ -103,7 +106,7 @@ public class ChooseSeatsFragment extends Fragment {
                 glSeating.addView(v);
 
                 if (j == 4 || (i == 0 && j == 0) || (i == 0 && j == cols - 1)
-                        || (i == rows - 1 && j == 0) || (i == rows - 1 && j == cols - 1)) { // This is the aisle (the middle gap)
+                        || (i == rows - 1 && j == 0) || (i == rows - 1 && j == cols - 1)) {
                     // do not show the seat if this place is not a valid seating place
                     continue;
                 }
@@ -122,6 +125,14 @@ public class ChooseSeatsFragment extends Fragment {
                     } else {
                         clickedView.setSelected(true);
                         selectedSeats.add(seat);
+                    }
+                    if (selectedSeats.isEmpty()){
+                        btnBookSeats.setEnabled(false);
+                        btnProceedToSnacks.setEnabled(false);
+                    }
+                    else {
+                        btnBookSeats.setEnabled(true);
+                        btnProceedToSnacks.setEnabled(true);
                     }
                 });
             }
