@@ -23,12 +23,8 @@ public class TicketSummaryFragment extends Fragment {
     private static final String ARG_PARAM1 = "movie";
     private static final String ARG_PARAM2 = "selectedSeats";
     private static final String ARG_PARAM3 = "selectedSnacks";
-    TextView tvMovieTitle;
-    TextView tvTotalPrice;
     ImageView ivMoviePoster;
-    TextView tvTicketsList;
-    TextView tvSnacksHeading;
-    TextView tvSnacksList;
+    TextView tvMovieTitle, tvTotalPrice, tvTicketsList, tvSnacksHeading, tvSnacksList;
     private Movie movie;
     private ArrayList<String> selectedSeats;
     private ArrayList<SelectedSnack> selectedSnacks;
@@ -98,7 +94,7 @@ public class TicketSummaryFragment extends Fragment {
             }
             tvSnacksList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
         }
-        tvTotalPrice.setText(String.valueOf(totalPrice) + "USD");
+        tvTotalPrice.setText(totalPrice + " USD");
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
