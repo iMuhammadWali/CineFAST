@@ -21,4 +21,14 @@
     <string name="ticket_summary_title">Ticket Summary</string>
     <string name="movie_playing_details">ScreenX Dolby Atmos</string>
     <string name="ticket_summary_button_text">Send Ticket</string>
+
+    <string name="back">Back</string>
+    <string name="booking_details">Booking details</string>
+
+    <string name="booked">Booked</string>
+    <string name="yours">Yours</string>
+    <string name="available">Available</string>
+
+    <string name="book_seats">Book Seats</string>
+    <string name="proceed_to_snacks">Proceed to Snacks</string>
 </resources>

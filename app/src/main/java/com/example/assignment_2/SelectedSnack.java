@@ -9,5 +9,22 @@ public class SelectedSnack {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        totalPrice = quantity * price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public float getTotalPrice() {
+        return totalPrice;
     }
 }

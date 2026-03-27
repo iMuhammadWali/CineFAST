@@ -26,7 +26,6 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
     private ArrayList<Snack> snacks;
     private Movie movie;
     private ArrayList<String> selectedSeats;
-    private ArrayList<SelectedSnack> selectedSnacks;
     private Map<String, Integer> snackQtyMap;
     private AppCompatButton btnConfirm;
     private static final String ARG_PARAM1 = "movie";
@@ -75,12 +74,15 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
     private void init(View view){
         lv = view.findViewById(R.id.lv);
         btnConfirm = view.findViewById(R.id.btnConfirm);
-        SnackListAdapter adapter = new SnackListAdapter(requireActivity(), this, snacks);
+        SnackListAdapter adapter = new SnackListAdapter(requireActivity(), this, snacks, snackQtyMap);
         lv.setAdapter(adapter);
     }
     private void setupUi(){
+        // TODO: Restore Snack Quantities from selectedSnacks
+
         btnConfirm.setOnClickListener((v)->{
             // Build selectedSnacks from the map.
+            ArrayList<SelectedSnack> selectedSnacks = new ArrayList<>();
             for (Snack snack : snacks){
                 Integer quantity = snackQtyMap.get(snack.getName());
                 if (quantity != null && quantity > 0){

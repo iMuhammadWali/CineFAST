@@ -16,13 +16,19 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 // If enough time, TODO: Use a ListView here for showing selected seats;
+// PS: I used a scrollView
+
+// TODO: Calculate TotalPrice and update it on the screen. [Done]
 public class TicketSummaryFragment extends Fragment {
     private static final String ARG_PARAM1 = "movie";
     private static final String ARG_PARAM2 = "selectedSeats";
     private static final String ARG_PARAM3 = "selectedSnacks";
     TextView tvMovieTitle;
+    TextView tvTotalPrice;
     ImageView ivMoviePoster;
     TextView tvTicketsList;
+    TextView tvSnacksHeading;
+    TextView tvSnacksList;
     private Movie movie;
     private ArrayList<String> selectedSeats;
     private ArrayList<SelectedSnack> selectedSnacks;
@@ -63,20 +69,36 @@ public class TicketSummaryFragment extends Fragment {
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         ivMoviePoster = view.findViewById(R.id.ivMoviePoster);
         tvTicketsList = view.findViewById(R.id.tvTicketsList);
+        tvSnacksHeading = view.findViewById(R.id.tvSnacksHeading);
+        tvSnacksList = view.findViewById(R.id.tvSnacksList);
+        tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
     }
     private void setupUi(){
+        float totalPrice = 0f;
         tvMovieTitle.setText(movie.getTitle());
         ivMoviePoster.setImageResource(movie.getPosterSrc());
         if (selectedSeats != null){
             StringBuilder htmlText = new StringBuilder(); // Accumulate HTML here
             int pricePerSeat = 16;
             for (String seat : selectedSeats) {
-                htmlText.append(seat).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append("<b>").append(pricePerSeat).append(" USD </b><br/>");        }
+                totalPrice += movie.getTicketPrice();
+                htmlText.append(seat).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append("<b>").append(pricePerSeat).append(" USD </b><br/>");
+            }
 
             tvTicketsList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
-        };
+        }
 
-        //TODO: Add Snacks here by using that 2D ArrayList
+        if (selectedSnacks != null && !selectedSnacks.isEmpty()) {
+            tvSnacksHeading.setVisibility(View.VISIBLE);
+            tvSnacksList.setVisibility(View.VISIBLE);
+            StringBuilder htmlText = new StringBuilder();
+            for (SelectedSnack snack : selectedSnacks) {
+                totalPrice += snack.getTotalPrice();
+                htmlText.append("X").append(snack.getQuantity()).append(" ").append(snack.getName()).append(" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ").append(snack.getTotalPrice()).append(" USD").append("</b><br/>");
+            }
+            tvSnacksList.setText(android.text.Html.fromHtml(htmlText.toString(), android.text.Html.FROM_HTML_MODE_LEGACY));
+        }
+        tvTotalPrice.setText(String.valueOf(totalPrice) + "USD");
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

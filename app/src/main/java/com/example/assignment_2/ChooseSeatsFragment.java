@@ -1,5 +1,7 @@
 package com.example.assignment_2;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,10 +18,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-// TODO: Understand the lifecycle of Fragment
-// TODO: Make the screen work for isComingSoonMovies
+// TODO: Understand the lifecycle of Fragment [Done]
+// TODO: Make the screen work for isComingSoonMovies [Done]
 public class ChooseSeatsFragment extends Fragment {
-    // Hooks and Attributes
     TextView tvMovieTitle;
     AppCompatButton btnBack, btnBookSeats, btnProceedToSnacks;
     GridLayout glSeating;
@@ -27,7 +28,6 @@ public class ChooseSeatsFragment extends Fragment {
     Movie movie;
     private static final String ARG_PARAM1 = "movie";
 
-    // Methods
     public static ChooseSeatsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_PARAM1, movie);
@@ -57,7 +57,6 @@ public class ChooseSeatsFragment extends Fragment {
         btnProceedToSnacks = v.findViewById(R.id.btnProceedToSnacks);
         v.findViewById(R.id.vBooked).setEnabled(false);
         v.findViewById(R.id.vYours).setSelected(true);
-
     }
     private void setupUi(View view){
         tvMovieTitle.setText(movie.getTitle());
@@ -65,26 +64,43 @@ public class ChooseSeatsFragment extends Fragment {
                 .getSupportFragmentManager()
                 .popBackStack());
 
-        btnBookSeats.setOnClickListener((v)->{
-            TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, null);
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fContainer, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-        btnBookSeats.setEnabled(false);
-
-        btnProceedToSnacks.setOnClickListener((v)->{
-            ChooseSnacksFragment fragment = ChooseSnacksFragment.newInstance(movie, selectedSeats);
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fContainer, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-        btnProceedToSnacks.setEnabled(false);
-
+        if (movie.isComingSoon){
+            btnBookSeats.setEnabled(false);
+        }
+        else {
+            btnBookSeats.setOnClickListener((v) -> {
+                TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, null);
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fContainer, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+        if (movie.isComingSoon){
+            btnBookSeats.setText("Coming Soon");
+            btnProceedToSnacks.setText("Watch Trailer");
+            btnProceedToSnacks.setBackgroundResource(R.drawable.app_white_button);
+            btnProceedToSnacks.setTextColor(getResources().getColor(R.color.black));
+            btnProceedToSnacks.setOnClickListener((v)->{
+                String link = movie.trailerLink;
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+            });
+        }
+        else {
+            btnProceedToSnacks.setOnClickListener((v) -> {
+                ChooseSnacksFragment fragment = ChooseSnacksFragment.newInstance(movie, selectedSeats);
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fContainer, fragment)
+                        .addToBackStack(null)
+                        .commit();
+            });
+        }
+        if (selectedSeats.isEmpty()){
+            btnBookSeats.setEnabled(false);
+            btnProceedToSnacks.setEnabled(false);
+        }
         createSeatsGrid();
     }
     private int dpToPx(int dp) {
@@ -92,6 +108,7 @@ public class ChooseSeatsFragment extends Fragment {
         return Math.round((float) dp * density);
     }
     private void createSeatsGrid(){
+        glSeating.removeAllViews();
         int rows = 8;
         int cols = 9;
 
@@ -117,24 +134,26 @@ public class ChooseSeatsFragment extends Fragment {
                 v.setBackgroundResource(R.drawable.app_choose_seats_seat);
                 String seatName = "Row " + (i + 1) + " Seat " + (j + 1);
                 v.setTag(seatName);
-                v.setOnClickListener(clickedView -> {
-                    String seat = (String) clickedView.getTag();
-                    if (clickedView.isSelected()) {
-                        clickedView.setSelected(false);
-                        selectedSeats.remove(seat);
-                    } else {
-                        clickedView.setSelected(true);
-                        selectedSeats.add(seat);
-                    }
-                    if (selectedSeats.isEmpty()){
-                        btnBookSeats.setEnabled(false);
-                        btnProceedToSnacks.setEnabled(false);
-                    }
-                    else {
-                        btnBookSeats.setEnabled(true);
-                        btnProceedToSnacks.setEnabled(true);
-                    }
-                });
+                v.setSelected(selectedSeats.contains(seatName));
+                if (!movie.isComingSoon) {
+                    v.setOnClickListener(clickedView -> {
+                        String seat = (String) clickedView.getTag();
+                        if (clickedView.isSelected()) {
+                            clickedView.setSelected(false);
+                            selectedSeats.remove(seat);
+                        } else {
+                            clickedView.setSelected(true);
+                            selectedSeats.add(seat);
+                        }
+                        if (selectedSeats.isEmpty()) {
+                            btnBookSeats.setEnabled(false);
+                            btnProceedToSnacks.setEnabled(false);
+                        } else {
+                            btnBookSeats.setEnabled(true);
+                            btnProceedToSnacks.setEnabled(true);
+                        }
+                    });
+                }
             }
         }
     }
