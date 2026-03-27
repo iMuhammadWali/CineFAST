@@ -1,9 +1,11 @@
 package com.example.assignment_2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ public class TicketSummaryFragment extends Fragment {
     private static final String ARG_PARAM3 = "selectedSnacks";
     ImageView ivMoviePoster;
     TextView tvMovieTitle, tvTotalPrice, tvTicketsList, tvSnacksHeading, tvSnacksList;
+    AppCompatButton btnBack, btnConfirm;
     private Movie movie;
     private ArrayList<String> selectedSeats;
     private ArrayList<SelectedSnack> selectedSnacks;
@@ -68,8 +71,51 @@ public class TicketSummaryFragment extends Fragment {
         tvSnacksHeading = view.findViewById(R.id.tvSnacksHeading);
         tvSnacksList = view.findViewById(R.id.tvSnacksList);
         tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
+        btnBack = view.findViewById(R.id.btnBack);
+        btnConfirm = view.findViewById(R.id.btnConfirm);
     }
     private void setupUi(){
+        btnBack.setOnClickListener((v)->{
+            requireActivity()
+                    .getSupportFragmentManager()
+                    .popBackStack();
+        });
+        btnConfirm.setOnClickListener(v -> {
+            String seatsText = (selectedSeats != null && !selectedSeats.isEmpty())
+                    ? String.join(", ", selectedSeats)
+                    : "None";
+
+            String snacksText = "None";
+            if (selectedSnacks != null && !selectedSnacks.isEmpty()) {
+                ArrayList<String> snackLines = new ArrayList<>();
+                for (SelectedSnack snack : selectedSnacks) {
+                    snackLines.add(snack.getName() + " x" + snack.getQuantity());
+                }
+                snacksText = String.join(", ", snackLines);
+            }
+
+            String subject = "Movie Ticket Confirmation: " + tvMovieTitle.getText().toString();
+            String body = "Thank you for your order!\n\n" +
+                    "Movie: " + tvMovieTitle.getText().toString() + "\n" +
+                    "Date: 13/4/2025\n" +
+                    "Time: 22:15\n" +
+                    "Seats: " + seatsText + "\n" +
+                    "Snacks: " + snacksText + "\n" +
+                    "Total Price: " + tvTotalPrice.getText().toString() + "\n\n" +
+                    "Enjoy your movie!";
+
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(android.net.Uri.parse("mailto:"));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+            try {
+                startActivity(Intent.createChooser(emailIntent, "Send Confirmation Email..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(requireContext(), "No email apps installed.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         float totalPrice = 0f;
         tvMovieTitle.setText(movie.getTitle());
         ivMoviePoster.setImageResource(movie.getPosterSrc());

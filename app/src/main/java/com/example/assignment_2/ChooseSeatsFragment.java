@@ -60,7 +60,8 @@ public class ChooseSeatsFragment extends Fragment {
     }
     private void setupUi(View view){
         tvMovieTitle.setText(movie.getTitle());
-        btnBack.setOnClickListener((v)-> requireActivity()
+        btnBack.setOnClickListener((v)->
+                requireActivity()
                 .getSupportFragmentManager()
                 .popBackStack());
 
@@ -69,6 +70,8 @@ public class ChooseSeatsFragment extends Fragment {
         }
         else {
             btnBookSeats.setOnClickListener((v) -> {
+                Toast.makeText(requireActivity(), "Booking Confirmed!", Toast.LENGTH_SHORT).show();
+
                 TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, null);
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
