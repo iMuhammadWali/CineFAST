@@ -59,6 +59,11 @@ public class ChooseSeatsFragment extends Fragment {
         v.findViewById(R.id.vYours).setSelected(true);
     }
     private void setupUi(View view){
+        if (selectedSeats.isEmpty()){
+            btnBookSeats.setEnabled(false);
+            btnProceedToSnacks.setEnabled(false);
+        }
+
         tvMovieTitle.setText(movie.getTitle());
         btnBack.setOnClickListener((v)->
                 requireActivity()
@@ -89,6 +94,7 @@ public class ChooseSeatsFragment extends Fragment {
                 String link = movie.trailerLink;
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
             });
+            btnProceedToSnacks.setEnabled(true);
         }
         else {
             btnProceedToSnacks.setOnClickListener((v) -> {
@@ -99,10 +105,6 @@ public class ChooseSeatsFragment extends Fragment {
                         .addToBackStack(null)
                         .commit();
             });
-        }
-        if (selectedSeats.isEmpty()){
-            btnBookSeats.setEnabled(false);
-            btnProceedToSnacks.setEnabled(false);
         }
         createSeatsGrid();
     }
