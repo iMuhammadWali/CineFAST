@@ -60,7 +60,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             tVMovieGenre = itemView.findViewById(R.id.tvMovieGenre);
             btnBookSeats = itemView.findViewById(R.id.btnBookSeats);
             btnTrailer = itemView.findViewById(R.id.btnTrailer);
-
         }
     }
 

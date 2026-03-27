@@ -7,9 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
@@ -52,7 +50,7 @@ public class HomeFragment extends Fragment {
     }
     private void setupUi() {
         ivMenu.setOnClickListener(v -> {
-            final String[] options = {"View Last Booking"};
+            String[] options = {"View Last Booking"};
 
             AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
             builder.setTitle("Menu");

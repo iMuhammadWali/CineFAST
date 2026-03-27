@@ -30,9 +30,9 @@ public class NowShowingFragment extends Fragment {
     }
     private void populateMovies(){
         movies.add(new Movie(R.drawable.movie_detective_conan,"Detective Conan: One-Eyed Flashback", "Action / Mystery", "https://youtu.be/OhamdzseR4o?si=8y_G94W9dqdBV2ep", false));
-        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "No Link", false));
-        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "No Link", false));
-        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "No Link", false));
+        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "https://youtu.be/FHgm89hKpXU?si=y8orMhYsxCicwpO-", false));
+        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "https://youtu.be/8g18jFHCLXk?si=AT1fCnp5GGmdsS0W", false));
+        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "https://youtu.be/oI3UuneLcyU?si=30Zy3ehH4wKTI9-r", false));
     }
     private void init(View v){
         rv = v.findViewById(R.id.rv);
