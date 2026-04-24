@@ -1,5 +1,6 @@
 package com.example.assignment_2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,9 @@ public class ChooseSeatsFragment extends Fragment {
     GridLayout glSeating;
     ArrayList<String> selectedSeats;
     Movie movie;
+    NavigationManager navigationManager;
+    LinearLayout llMovieInformation;
+    ImageView ivMoviePoster;
     private static final String ARG_PARAM1 = "movie";
 
     public static ChooseSeatsFragment newInstance(Movie movie) {
@@ -34,6 +40,12 @@ public class ChooseSeatsFragment extends Fragment {
         ChooseSeatsFragment fragment = new ChooseSeatsFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        navigationManager = (NavigationManager) context;
     }
 
     @Override
@@ -50,43 +62,37 @@ public class ChooseSeatsFragment extends Fragment {
         // Required empty public constructor
     }
     private void init(View v){
+        llMovieInformation = v.findViewById(R.id.llMovieInformation);
+        ivMoviePoster = v.findViewById(R.id.ivMoviePoster);
         tvMovieTitle = v.findViewById(R.id.tvMovieTitle);
-        btnBack = v.findViewById(R.id.btnBack);
+//        btnBack = v.findViewById(R.id.btnBack);
         glSeating = v.findViewById(R.id.glSeating);
         btnBookSeats = v.findViewById(R.id.btnBookSeats);
         btnProceedToSnacks = v.findViewById(R.id.btnProceedToSnacks);
+
+        //Setup the instruction buttons.
         v.findViewById(R.id.vBooked).setEnabled(false);
         v.findViewById(R.id.vYours).setSelected(true);
     }
     private void setupUi(View view){
+        ivMoviePoster.setImageResource(movie.getPosterSrc());
         if (selectedSeats.isEmpty()){
             btnBookSeats.setEnabled(false);
             btnProceedToSnacks.setEnabled(false);
         }
 
         tvMovieTitle.setText(movie.getTitle());
-        btnBack.setOnClickListener((v)->
-                requireActivity()
-                .getSupportFragmentManager()
-                .popBackStack());
+
+//        btnBack.setOnClickListener((v)->{
+//            navigationManager.openPreviousFragment();
+//        });
 
         if (movie.isComingSoon){
             btnBookSeats.setEnabled(false);
-        }
-        else {
-            btnBookSeats.setOnClickListener((v) -> {
-                Toast.makeText(requireActivity(), "Booking Confirmed!", Toast.LENGTH_SHORT).show();
 
-                TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, null);
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fContainer, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            });
-        }
-        if (movie.isComingSoon){
             btnBookSeats.setText("Coming Soon");
+
+            btnProceedToSnacks.setEnabled(true);
             btnProceedToSnacks.setText("Watch Trailer");
             btnProceedToSnacks.setBackgroundResource(R.drawable.app_white_button);
             btnProceedToSnacks.setTextColor(getResources().getColor(R.color.black));
@@ -94,16 +100,14 @@ public class ChooseSeatsFragment extends Fragment {
                 String link = movie.trailerLink;
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
             });
-            btnProceedToSnacks.setEnabled(true);
         }
         else {
+            btnBookSeats.setOnClickListener((v) -> {
+                Toast.makeText(requireActivity(), "Booking Confirmed!", Toast.LENGTH_SHORT).show();
+                navigationManager.openTicketSummary(movie, selectedSeats);
+            });
             btnProceedToSnacks.setOnClickListener((v) -> {
-                ChooseSnacksFragment fragment = ChooseSnacksFragment.newInstance(movie, selectedSeats);
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fContainer, fragment)
-                        .addToBackStack(null)
-                        .commit();
+                navigationManager.openSnacks(movie, selectedSeats);
             });
         }
         createSeatsGrid();
@@ -133,7 +137,7 @@ public class ChooseSeatsFragment extends Fragment {
                     continue;
                 }
 
-                if (i == 2){
+                if (i == 2 || movie.isComingSoon){
                     v.setEnabled(false);
                 }
                 v.setBackgroundResource(R.drawable.app_choose_seats_seat);

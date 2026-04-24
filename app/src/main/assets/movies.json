@@ -1,0 +1,28 @@
+{
+  "nowShowingMovies": [
+    {
+      "title": "Detective Conan: One-Eyed Flashback",
+      "genre": "Mystery / Action",
+      "posterSrc": "movie_detective_conan",
+      "trailerLink": "https://youtu.be/OhamdzseR4o?si=8y_G94W9dqdBV2ep"
+    },
+    {
+      "title": "Dragon Ball Super: Broly",
+      "genre": "Action",
+      "posterSrc": "movie_dragon_ball",
+      "trailerLink": "https://youtu.be/FHgm89hKpXU?si=y8orMhYsxCicwpO-"
+    },
+    {
+      "title": "Before Sunset",
+      "genre": "Romance",
+      "posterSrc": "movie_before_sunset",
+      "trailerLink": "https://youtu.be/oI3UuneLcyU?si=30Zy3ehH4wKTI9-r"
+    },
+    {
+      "title": "Dune",
+      "genre": "Action",
+      "posterSrc": "movie_dune",
+      "trailerLink": "https://youtu.be/8g18jFHCLXk?si=AT1fCnp5GGmdsS0W"
+    }
+  ]
+}

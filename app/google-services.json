@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "626858570495",
+    "project_id": "cinefast-8bccf",
+    "storage_bucket": "cinefast-8bccf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626858570495:android:f1bfd40f0be232c9f892ca",
+        "android_client_info": {
+          "package_name": "com.example.assignment_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0aAblUTlzpM_mnHMPeXnkhp7TZFgFTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

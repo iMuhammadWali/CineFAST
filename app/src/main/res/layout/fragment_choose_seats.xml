@@ -7,49 +7,64 @@
     android:orientation="vertical">
 
 <!--    The information (Metadata) part -->
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3.5"
-        android:background="#c4c4c4"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:layout_weight="3.5">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/app_back_button"
-            android:layout_marginStart="20dp"
-            android:id="@+id/btnBack"/>
-
-        <!--Movie title, subject to change as passed through the intent-->
-        <TextView
+        <ImageView
+            android:id="@+id/ivMoviePoster"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/movie_title"
-            android:fontFamily="@font/poppins"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:paddingHorizontal="15dp"
-            android:id="@+id/tvMovieTitle" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            tools:ignore="NestedWeights" />
+            android:layout_height="match_parent"
+            android:background="#99000000"/>
 
-<!--        Now I have to work on this as well-->
-        <ImageView
+        <LinearLayout
+            android:id="@+id/llMovieInformation"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/back"
-            android:src="@drawable/app_choose_seats_booking_details" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
-    </LinearLayout>
+            <!--Movie title, subject to change as passed through the intent-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/movie_title"
+                android:fontFamily="@font/poppins"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:paddingHorizontal="15dp"
+                android:id="@+id/tvMovieTitle" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                tools:ignore="NestedWeights" />
+
+            <!--        Now I have to work on this as well-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/back"
+                android:src="@drawable/app_choose_seats_booking_details" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 <!--    The Seats part -->
     <LinearLayout

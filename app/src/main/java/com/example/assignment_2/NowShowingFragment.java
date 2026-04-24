@@ -9,7 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class NowShowingFragment extends Fragment {
@@ -29,10 +35,49 @@ public class NowShowingFragment extends Fragment {
         return v;
     }
     private void populateMovies(){
-        movies.add(new Movie(R.drawable.movie_detective_conan,"Detective Conan: One-Eyed Flashback", "Action / Mystery", "https://youtu.be/OhamdzseR4o?si=8y_G94W9dqdBV2ep", false));
-        movies.add(new Movie(R.drawable.movie_dragon_ball,"Dragon Ball Super: Broly", "Action", "https://youtu.be/FHgm89hKpXU?si=y8orMhYsxCicwpO-", false));
-        movies.add(new Movie(R.drawable.movie_dune,"Dune", "Action", "https://youtu.be/8g18jFHCLXk?si=AT1fCnp5GGmdsS0W", false));
-        movies.add(new Movie(R.drawable.movie_before_sunset,"Before Sunset", "Romance", "https://youtu.be/oI3UuneLcyU?si=30Zy3ehH4wKTI9-r", false));
+        try {
+            java.io.InputStream is = requireActivity().getAssets().open("movies.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String moviesJson = new String(buffer, StandardCharsets.UTF_8);
+
+            JSONObject moviesJSON = new JSONObject(moviesJson);
+            JSONArray nowShowingMovies = moviesJSON.getJSONArray("nowShowingMovies");
+
+            Toast.makeText(requireActivity(),
+                    String.valueOf(nowShowingMovies.length()),
+                    Toast.LENGTH_SHORT).show();
+
+            for (int i = 0; i < nowShowingMovies.length(); i++){
+                JSONObject obj = nowShowingMovies.getJSONObject(i);
+                String title = obj.getString("title");
+                String genre = obj.getString("genre");
+                String trailer = obj.getString("trailerLink");
+
+                String posterName = obj.getString("posterSrc");
+
+                int posterId = requireActivity()
+                        .getResources()
+                        .getIdentifier(posterName, "drawable", requireActivity().getPackageName());
+
+                Movie movie = new Movie(
+                        posterId,
+                        title,
+                        genre,
+                        trailer,
+                        false
+                );
+
+                movies.add(movie);
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(requireActivity(),
+                    e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
     private void init(View v){
         rv = v.findViewById(R.id.rv);
@@ -40,7 +85,10 @@ public class NowShowingFragment extends Fragment {
 
         movies = new ArrayList<>();
         populateMovies();
-        adapter = new MovieListAdapter(requireActivity(), movies);
+        adapter = new MovieListAdapter(
+                (NavigationManager) requireActivity(),
+                movies
+        );
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         rv.setAdapter(adapter);
     }

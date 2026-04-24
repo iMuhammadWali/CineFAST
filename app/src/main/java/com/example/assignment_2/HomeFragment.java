@@ -2,6 +2,7 @@ package com.example.assignment_2;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 // Notes:-
@@ -34,7 +36,7 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
-    //TODO: Understand Layout Inflation [Done]
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,47 +51,52 @@ public class HomeFragment extends Fragment {
         setupUi();
     }
     private void setupUi() {
-        ivMenu.setOnClickListener(v -> {
-            String[] options = {"View Last Booking"};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-            builder.setTitle("Menu");
-
-            builder.setItems(options, (dialog, which) -> {
-                if (which == 0) {
-                    SharedPreferences prefs =
-                            requireActivity().getSharedPreferences("bookingPrefs", Context.MODE_PRIVATE);
-
-                    String movie = prefs.getString("movieTitle", null);
-                    int seats = prefs.getInt("seatCount", -1);
-                    float total = prefs.getFloat("totalPrice", -1f);
-
-                    AlertDialog.Builder infoBuilder = new AlertDialog.Builder(requireActivity());
-
-                    if (movie == null || seats < 0 || total < 0f) {
-                        infoBuilder.setTitle("Last Booking");
-                        infoBuilder.setMessage("No previous booking found.");
-                    } else {
-                        String message = "Movie: " + movie + "\n" +
-                                "Seats: " + seats + "\n" +
-                                "Total Price: $" + total;
-                        infoBuilder.setTitle("Last Booking");
-                        infoBuilder.setMessage(message);
-                    }
-
-                    infoBuilder.setPositiveButton("OK", (d, w) -> d.dismiss());
-                    infoBuilder.show();
-                }
-            });
-
-            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-            builder.show();
-        });
+//
+//        ivMenu.setOnClickListener(v -> {
+//            String[] options = {"View Last Booking", "Logout"};
+//
+//            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+//            builder.setTitle("Menu");
+//
+//            builder.setItems(options, (dialog, which) -> {
+//                if (which == 0) {
+//                    SharedPreferences prefs =
+//                            requireActivity().getSharedPreferences("bookingPrefs", Context.MODE_PRIVATE);
+//
+//                    String movie = prefs.getString("movieTitle", null);
+//                    int seats = prefs.getInt("seatCount", -1);
+//                    float total = prefs.getFloat("totalPrice", -1f);
+//
+//                    AlertDialog.Builder infoBuilder = new AlertDialog.Builder(requireActivity());
+//
+//                    if (movie == null || seats < 0 || total < 0f) {
+//                        infoBuilder.setTitle("Last Booking");
+//                        infoBuilder.setMessage("No previous booking found.");
+//                    } else {
+//                        String message = "Movie: " + movie + "\n" +
+//                                "Seats: " + seats + "\n" +
+//                                "Total Price: $" + total;
+//                        infoBuilder.setTitle("Last Booking");
+//                        infoBuilder.setMessage(message);
+//                    }
+//
+//                    infoBuilder.setPositiveButton("OK", (d, w) -> d.dismiss());
+//                    infoBuilder.show();
+//                }
+//                else if (which == 1){
+//                    FirebaseAuth.getInstance().signOut();
+//                    startActivity(new Intent(requireActivity(), LoginActivity.class));
+//                }
+//            });
+//
+//            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+//            builder.show();
+//        });
     }
     private void init(View v){
         tl = v.findViewById(R.id.tl);
         vp2 = v.findViewById(R.id.vp2);
-        ivMenu = v.findViewById(R.id.ivMenu);
+//        ivMenu = v.findViewById(R.id.ivMenu);
         adapter = new ViewPagerAdapter(requireActivity());
         vp2.setAdapter(adapter);
 

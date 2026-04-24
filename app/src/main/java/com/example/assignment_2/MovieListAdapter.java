@@ -1,6 +1,9 @@
 package com.example.assignment_2;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
-    OnHomeMovieClickListener context;
+    NavigationManager navigationManager;
     ArrayList<Movie> movies;
-    public MovieListAdapter(Activity context, ArrayList<Movie> movies){
-        this.context = (OnHomeMovieClickListener) context;
+    public MovieListAdapter(NavigationManager navigationManager, ArrayList<Movie> movies){
+        this.navigationManager = navigationManager;
         this.movies = movies;
     }
 
@@ -37,10 +40,11 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         holder.ivMoviePoster.setImageResource(m.getPosterSrc());
 
         holder.btnBookSeats.setOnClickListener(v -> {
-            context.onHomeBookSeatsClick(m);
+            navigationManager.openChooseSeats(m);
         });
-        holder.btnTrailer.setOnClickListener((v)->{
-            context.onHomeTrailerClick(m);
+
+        holder.btnTrailer.setOnClickListener(v -> {
+            navigationManager.openTrailer(m.getTrailerLink());
         });
     }
 
@@ -61,10 +65,5 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
             btnBookSeats = itemView.findViewById(R.id.btnBookSeats);
             btnTrailer = itemView.findViewById(R.id.btnTrailer);
         }
-    }
-
-    public interface OnHomeMovieClickListener {
-        void onHomeBookSeatsClick(Movie m);
-        void onHomeTrailerClick(Movie m);
     }
 }

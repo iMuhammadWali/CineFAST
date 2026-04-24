@@ -39,7 +39,10 @@ public class ComingSoonFragment extends Fragment {
 
         movies = new ArrayList<>();
         populateMovies();
-        adapter = new MovieListAdapter(requireActivity(), movies);
+        adapter = new MovieListAdapter(
+                (NavigationManager) requireActivity(),
+                movies
+        );
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         rv.setAdapter(adapter);
     }
