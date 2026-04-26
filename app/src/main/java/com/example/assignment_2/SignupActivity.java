@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -14,16 +15,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
-
     FirebaseAuth mAuth;
-
+    FirebaseDatabase mDatabase;
     TextView tvLogin, tvNameError, tvEmailError, tvPasswordError, tvConfirmPasswordError;
     AppCompatButton btnSignup;
 
     EditText etName, etEmail, etPassword, etConfirmPassword;
 
+    ProgressBar pbSignup;
 //    TODO: for now, it shows the error sent back by firebase, I need to see how to make it consistent.
 //    TODO: Make a custom view for the dialog.
     @Override
@@ -48,6 +53,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void init() {
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
 
         tvLogin = findViewById(R.id.tvLogin);
 
@@ -62,19 +68,19 @@ public class SignupActivity extends AppCompatActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
 
         btnSignup = findViewById(R.id.btnSignup);
+        pbSignup = findViewById(R.id.pbSignup);
     }
 
     private void setListeners() {
-
         tvLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
 
         btnSignup.setOnClickListener(v -> {
-
             clearErrors();
-
+            pbSignup.setVisibility(View.VISIBLE);
+            btnSignup.setVisibility(View.GONE);
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
@@ -117,11 +123,20 @@ public class SignupActivity extends AppCompatActivity {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            HashMap<String, Object> data = new HashMap<>();
+                            data.put("username", etName.getText().toString().trim());
+                            DatabaseReference ref = mDatabase.getReference();
+                            ref.child("users").child(mAuth.getUid()).setValue(data);
+
                             startActivity(new Intent(this, MainActivity.class));
                             finish();
                         } else {
                             showErrorDialog(String.valueOf(task.getException()));
+                            pbSignup.setVisibility(View.GONE);
+                            btnSignup.setVisibility(View.VISIBLE);
                         }
+                        pbSignup.setVisibility(View.GONE);
+                        btnSignup.setVisibility(View.VISIBLE);
                     });
         });
     }

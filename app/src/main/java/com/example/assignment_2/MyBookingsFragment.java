@@ -2,57 +2,40 @@ package com.example.assignment_2;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyBookingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+
 public class MyBookingsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private ArrayList<MyBooking> myBookings;
+    RecyclerView recyclerView;
+    FirebaseAuth mAuth;
+    FirebaseDatabase mDatabase;
+    DatabaseReference mReference;
+    MyBookingListAdapter adapter;
+    ProgressBar progressBar;
     public MyBookingsFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyBookingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyBookingsFragment newInstance(String param1, String param2) {
-        MyBookingsFragment fragment = new MyBookingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -60,5 +43,65 @@ public class MyBookingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_bookings, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init(view);
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        loadBookings();
+    }
+    private void init(View view){
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+
+        myBookings = new ArrayList<>();
+        recyclerView = view.findViewById(R.id.recyclerView);
+        adapter = new MyBookingListAdapter(requireContext(), myBookings);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(adapter);
+        progressBar = view.findViewById(R.id.progressBar);
+    }
+    private void loadBookings(){
+        if (mAuth.getCurrentUser() == null)
+            Toast.makeText(requireContext(), "User is not logged in?", Toast.LENGTH_SHORT).show();;
+        String userId = mAuth.getCurrentUser().getUid();
+        mReference = mDatabase.getReference("bookings").child(userId);
+
+        mReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                myBookings.clear();
+                for (DataSnapshot bookingSnap : snapshot.getChildren()){Long numTickets = bookingSnap.child("numTickets").getValue(Long.class);
+                    Long timestamp = bookingSnap.child("timestamp").getValue(Long.class);
+
+                    String title = bookingSnap.child("title").getValue(String.class);
+                    String posterSrc = bookingSnap.child("posterSrc").getValue(String.class);
+
+                    MyBooking booking = new MyBooking(
+                            title,
+                            posterSrc,
+                            String.valueOf(numTickets),
+                            String.valueOf(android.text.format.DateFormat.format(
+                                    "dd/MM/yyyy hh:mm a",
+                                    new java.util.Date(timestamp)
+                            ))
+                    );
+                    myBookings.add(booking);
+                }
+                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }

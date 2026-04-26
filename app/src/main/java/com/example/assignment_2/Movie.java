@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 import java.io.Serializable;
 
 public class Movie implements Serializable {
-    int posterSrc;
+    String posterSrc;
     String title;
     String genre;
     String trailerLink;
@@ -13,7 +13,7 @@ public class Movie implements Serializable {
     boolean isComingSoon;
 
     final float ticketPrice = 16.0f;
-    public int getPosterSrc(){
+    public String getPosterSrc(){
         return posterSrc;
     }
     public String getTitle() {
@@ -46,7 +46,7 @@ public class Movie implements Serializable {
     public float getTicketPrice() {
         return ticketPrice;
     }
-    public Movie(int posterSrc, String title, String genre, String trailerLink, boolean isComingSoon) {
+    public Movie(String posterSrc, String title, String genre, String trailerLink, boolean isComingSoon) {
         this.posterSrc = posterSrc;
         this.title = title;
         this.genre = genre;

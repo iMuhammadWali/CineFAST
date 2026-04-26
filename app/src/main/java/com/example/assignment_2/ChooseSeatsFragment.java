@@ -25,7 +25,7 @@ import java.util.ArrayList;
 // TODO: Make the screen work for isComingSoonMovies [Done]
 public class ChooseSeatsFragment extends Fragment {
     TextView tvMovieTitle;
-    AppCompatButton btnBack, btnBookSeats, btnProceedToSnacks;
+    AppCompatButton btnBookSeats, btnProceedToSnacks;
     GridLayout glSeating;
     ArrayList<String> selectedSeats;
     Movie movie;
@@ -61,11 +61,22 @@ public class ChooseSeatsFragment extends Fragment {
     public ChooseSeatsFragment() {
         // Required empty public constructor
     }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_choose_seats, container, false);
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init(view);
+        setupUi(view);
+    }
     private void init(View v){
         llMovieInformation = v.findViewById(R.id.llMovieInformation);
         ivMoviePoster = v.findViewById(R.id.ivMoviePoster);
         tvMovieTitle = v.findViewById(R.id.tvMovieTitle);
-//        btnBack = v.findViewById(R.id.btnBack);
         glSeating = v.findViewById(R.id.glSeating);
         btnBookSeats = v.findViewById(R.id.btnBookSeats);
         btnProceedToSnacks = v.findViewById(R.id.btnProceedToSnacks);
@@ -74,18 +85,22 @@ public class ChooseSeatsFragment extends Fragment {
         v.findViewById(R.id.vBooked).setEnabled(false);
         v.findViewById(R.id.vYours).setSelected(true);
     }
+    private int dpToPx(int dp) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
     private void setupUi(View view){
-        ivMoviePoster.setImageResource(movie.getPosterSrc());
+        int posterId = requireActivity()
+                .getResources()
+                .getIdentifier(movie.getPosterSrc(), "drawable", requireActivity().getPackageName());
+
+        ivMoviePoster.setImageResource(posterId);
         if (selectedSeats.isEmpty()){
             btnBookSeats.setEnabled(false);
             btnProceedToSnacks.setEnabled(false);
         }
 
         tvMovieTitle.setText(movie.getTitle());
-
-//        btnBack.setOnClickListener((v)->{
-//            navigationManager.openPreviousFragment();
-//        });
 
         if (movie.isComingSoon){
             btnBookSeats.setEnabled(false);
@@ -103,18 +118,13 @@ public class ChooseSeatsFragment extends Fragment {
         }
         else {
             btnBookSeats.setOnClickListener((v) -> {
-                Toast.makeText(requireActivity(), "Booking Confirmed!", Toast.LENGTH_SHORT).show();
-                navigationManager.openTicketSummary(movie, selectedSeats);
+                navigationManager.openTicketSummary(movie, selectedSeats, null);
             });
             btnProceedToSnacks.setOnClickListener((v) -> {
                 navigationManager.openSnacks(movie, selectedSeats);
             });
         }
         createSeatsGrid();
-    }
-    private int dpToPx(int dp) {
-        float density = getResources().getDisplayMetrics().density;
-        return Math.round((float) dp * density);
     }
     private void createSeatsGrid(){
         glSeating.removeAllViews();
@@ -165,17 +175,5 @@ public class ChooseSeatsFragment extends Fragment {
                 }
             }
         }
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_seats, container, false);
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        init(view);
-        setupUi(view);
     }
 }

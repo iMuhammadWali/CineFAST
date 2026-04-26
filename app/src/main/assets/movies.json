@@ -24,5 +24,25 @@
       "posterSrc": "movie_dune",
       "trailerLink": "https://youtu.be/8g18jFHCLXk?si=AT1fCnp5GGmdsS0W"
     }
+  ],
+  "comingSoonMovies": [
+    {
+      "title": "Detective Conan: Fallen Angel of the Highway",
+      "genre":"Action / Mystery",
+      "posterSrc": "movie_detective_conan_coming_soon",
+      "trailerLink": ""
+    },
+    {
+      "title": "That time I got Reincarnated as a slime the Movie: Tears of the Azure Sea",
+      "genre":"Action / Comedy",
+      "posterSrc": "movie_slime_coming_soon",
+      "trailerLink": ""
+    },
+    {
+      "title": "Sound! Euphonium The Final Movie Part 1",
+      "genre":"Action",
+      "posterSrc": "movie_sound_euphonium_coming_soon",
+      "trailerLink": ""
+    }
   ]
 }

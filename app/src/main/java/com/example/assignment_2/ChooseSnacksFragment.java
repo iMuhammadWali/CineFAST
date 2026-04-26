@@ -1,5 +1,6 @@
 package com.example.assignment_2;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,15 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.SnackOnClickListener {
     ListView lv;
@@ -28,6 +24,8 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
     private ArrayList<String> selectedSeats;
     private Map<String, Integer> snackQtyMap;
     private AppCompatButton btnConfirm;
+    NavigationManager navigationManager;
+
     private static final String ARG_PARAM1 = "movie";
     private static final String ARG_PARAM2 = "selectedSeats";
     public static ChooseSnacksFragment newInstance(Movie movie, ArrayList<String> selectedSeats){
@@ -38,15 +36,25 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
         fragment.setArguments(args);
         return fragment;
     }
+
     public ChooseSnacksFragment() {
         // Required empty public constructor
     }
+
     private void populateSnacks(){
+//        TODO: Load these from SQLite.
         snacks.add(new Snack(R.drawable.snacks_popcorn, "Popcorn", "Large / Buttered", 8.99f));
         snacks.add(new Snack(R.drawable.snacks_nachos, "Nachos", "With Cheese Dip", 7.99f));
         snacks.add(new Snack(R.drawable.snacks_soft_drink, "Soft Drink", "Large / Any Flavor", 5.99f));
         snacks.add(new Snack(R.drawable.snacks_lays, "Lays", "Family Pack", 1.99f));
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        navigationManager = (NavigationManager) context;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,15 +79,22 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_choose_snacks, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init(view);
+        setupUi();;
+    }
+
     private void init(View view){
         lv = view.findViewById(R.id.lv);
         btnConfirm = view.findViewById(R.id.btnConfirm);
         SnackListAdapter adapter = new SnackListAdapter(requireActivity(), this, snacks, snackQtyMap);
         lv.setAdapter(adapter);
     }
-    private void setupUi(){
-        // TODO: Restore Snack Quantities from selectedSnacks
 
+    private void setupUi(){
         btnConfirm.setOnClickListener((v)->{
             // Build selectedSnacks from the map.
             ArrayList<SelectedSnack> selectedSnacks = new ArrayList<>();
@@ -91,20 +106,8 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
                 }
             }
 
-            TicketSummaryFragment fragment = TicketSummaryFragment.newInstance(movie, selectedSeats, selectedSnacks);
-            requireActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fContainer, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            navigationManager.openTicketSummary(movie, selectedSeats, selectedSnacks);
         });
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        init(view);
-        setupUi();;
     }
 
     @Override

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Assignment_2</string>
+    <string name="app_name">CineFAST 2.0</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="movie_image_content_description">Movie Poster</string>

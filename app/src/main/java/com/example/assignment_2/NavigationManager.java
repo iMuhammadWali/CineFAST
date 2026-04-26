@@ -7,6 +7,6 @@ public interface NavigationManager {
     public void openPreviousFragment();
     public void openChooseSeats(Movie m);
     public void openTrailer(String trailer);
-    public void openTicketSummary(Movie m, ArrayList<String> seats);
+    public void openTicketSummary(Movie m, ArrayList<String> seats, ArrayList<SelectedSnack> snacks);
     public void openSnacks(Movie m, ArrayList<String> seats);
 }

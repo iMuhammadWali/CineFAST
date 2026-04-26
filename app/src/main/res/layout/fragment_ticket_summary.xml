@@ -11,42 +11,12 @@
         android:layout_weight="8"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/app_back_button"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:id="@+id/btnBack" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="@integer/material_motion_duration_long_1"
-                android:layout_height="wrap_content"
-                android:text="@string/ticket_summary_title"
-                android:fontFamily="@font/poppins"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:textStyle="bold"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:background="@drawable/app_back_button"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="10dp"
-                android:visibility="invisible" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="25dp"
             android:paddingHorizontal="22dp">
 
             <ImageView  android:layout_width="80dp"

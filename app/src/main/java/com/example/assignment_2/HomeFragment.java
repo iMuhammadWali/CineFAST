@@ -51,7 +51,6 @@ public class HomeFragment extends Fragment {
         setupUi();
     }
     private void setupUi() {
-//
 //        ivMenu.setOnClickListener(v -> {
 //            String[] options = {"View Last Booking", "Logout"};
 //
@@ -92,6 +91,7 @@ public class HomeFragment extends Fragment {
 //            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 //            builder.show();
 //        });
+
     }
     private void init(View v){
         tl = v.findViewById(R.id.tl);

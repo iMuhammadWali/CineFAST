@@ -1,8 +1,4 @@
 package com.example.assignment_2;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,26 +13,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
-// If enough time, TODO: Use a ListView here for showing selected seats;
-// PS: I used a scrollView
-
-// TODO: Calculate TotalPrice and update it on the screen. [Done]
 public class TicketSummaryFragment extends Fragment {
     private static final String ARG_PARAM1 = "movie";
     private static final String ARG_PARAM2 = "selectedSeats";
     private static final String ARG_PARAM3 = "selectedSnacks";
-    ImageView ivMoviePoster;
-    TextView tvMovieTitle, tvTotalPrice, tvTicketsList, tvSnacksHeading, tvSnacksList;
-    AppCompatButton btnBack, btnConfirm;
+    private ImageView ivMoviePoster;
+    private TextView tvMovieTitle, tvTotalPrice, tvTicketsList, tvSnacksHeading, tvSnacksList;
+    private AppCompatButton btnConfirm;
     private Movie movie;
     private ArrayList<String> selectedSeats;
     private ArrayList<SelectedSnack> selectedSnacks;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
 
     public TicketSummaryFragment() {
         // Required empty public constructor
     }
+
     public static TicketSummaryFragment newInstance(Movie movie, ArrayList<String> seats, ArrayList<SelectedSnack> snacks) {
         TicketSummaryFragment fragment = new TicketSummaryFragment();
         Bundle args = new Bundle();
@@ -67,19 +70,27 @@ public class TicketSummaryFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_ticket_summary, container, false);
     }
     private void init(View view){
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = mDatabase.getReference();
+
         tvMovieTitle = view.findViewById(R.id.tvMovieTitle);
         ivMoviePoster = view.findViewById(R.id.ivMoviePoster);
         tvTicketsList = view.findViewById(R.id.tvTicketsList);
         tvSnacksHeading = view.findViewById(R.id.tvSnacksHeading);
         tvSnacksList = view.findViewById(R.id.tvSnacksList);
         tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
-        btnBack = view.findViewById(R.id.btnBack);
         btnConfirm = view.findViewById(R.id.btnConfirm);
     }
+//    TODO: Make setupUi reusable.
     private void setupUi(){
         float totalPrice = 0f;
         tvMovieTitle.setText(movie.getTitle());
-        ivMoviePoster.setImageResource(movie.getPosterSrc());
+
+        int posterId = requireActivity().getResources()
+                .getIdentifier(movie.getPosterSrc(), "drawable", requireActivity().getPackageName());
+
+        ivMoviePoster.setImageResource(posterId);
         if (selectedSeats != null){
             StringBuilder htmlText = new StringBuilder(); // Accumulate HTML here
             int pricePerSeat = 16;
@@ -104,22 +115,26 @@ public class TicketSummaryFragment extends Fragment {
         tvTotalPrice.setText(totalPrice + " USD");
 
 
-
-        btnBack.setOnClickListener((v)->{
-            requireActivity()
-                    .getSupportFragmentManager()
-                    .popBackStack();
-        });
-
-        float finalTotalPrice = totalPrice;
         btnConfirm.setOnClickListener(v -> {
-            // Store the ticket using SharedPreferences
-            SharedPreferences prefs = requireActivity().getSharedPreferences("bookingPrefs", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("movieTitle", movie.getTitle());
-            editor.putInt("seatCount", selectedSeats.size());
-            editor.putFloat("totalPrice", finalTotalPrice);
-            editor.apply();
+            assert mAuth.getCurrentUser() != null;
+            String userId = mAuth.getCurrentUser().getUid();
+            HashMap<String, Object> data = new HashMap<>();
+
+            data.put("posterSrc", movie.getPosterSrc());
+            data.put("title", movie.getTitle());
+            data.put("numTickets", selectedSeats.size());
+            data.put("timestamp", System.currentTimeMillis());
+
+            mReference.child("bookings")
+                    .child(userId)
+                    .push()
+                    .setValue(data)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(requireContext(), "Booking confirmed.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
             String seatsText = (selectedSeats != null && !selectedSeats.isEmpty())
                     ? String.join(", ", selectedSeats)
@@ -134,6 +149,7 @@ public class TicketSummaryFragment extends Fragment {
                 snacksText = String.join(", ", snackLines);
             }
 
+            // I can send this through actual email using firebase now
             String subject = "Movie Ticket Confirmation: " + tvMovieTitle.getText().toString();
             String body = "Thank you for your order!\n\n" +
                     "Movie: " + tvMovieTitle.getText().toString() + "\n" +
@@ -144,16 +160,16 @@ public class TicketSummaryFragment extends Fragment {
                     "Total Price: " + tvTotalPrice.getText().toString() + "\n\n" +
                     "Enjoy your movie!";
 
-            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-            emailIntent.setData(android.net.Uri.parse("mailto:"));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
-            emailIntent.putExtra(Intent.EXTRA_TEXT, body);
-            emailIntent.setPackage("com.google.android.gm");
-            try {
-                startActivity(emailIntent);
-            } catch (Exception e) {
-                Toast.makeText(requireContext(), "No email apps installed.", Toast.LENGTH_SHORT).show();
-            }
+//            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+//            emailIntent.setData(android.net.Uri.parse("mailto:"));
+//            emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+//            emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+//            emailIntent.setPackage("com.google.android.gm");
+//            try {
+//                startActivity(emailIntent);
+//            } catch (Exception e) {
+//                Toast.makeText(requireContext(), "No email apps installed.", Toast.LENGTH_SHORT).show();
+//            }
         });
     }
     @Override

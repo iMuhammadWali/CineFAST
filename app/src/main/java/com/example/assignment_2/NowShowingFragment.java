@@ -46,9 +46,6 @@ public class NowShowingFragment extends Fragment {
             JSONObject moviesJSON = new JSONObject(moviesJson);
             JSONArray nowShowingMovies = moviesJSON.getJSONArray("nowShowingMovies");
 
-            Toast.makeText(requireActivity(),
-                    String.valueOf(nowShowingMovies.length()),
-                    Toast.LENGTH_SHORT).show();
 
             for (int i = 0; i < nowShowingMovies.length(); i++){
                 JSONObject obj = nowShowingMovies.getJSONObject(i);
@@ -63,7 +60,7 @@ public class NowShowingFragment extends Fragment {
                         .getIdentifier(posterName, "drawable", requireActivity().getPackageName());
 
                 Movie movie = new Movie(
-                        posterId,
+                        posterName,
                         title,
                         genre,
                         trailer,

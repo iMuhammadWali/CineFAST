@@ -1,9 +1,6 @@
 package com.example.assignment_2;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +16,7 @@ import java.util.ArrayList;
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieViewHolder> {
     NavigationManager navigationManager;
     ArrayList<Movie> movies;
+
     public MovieListAdapter(NavigationManager navigationManager, ArrayList<Movie> movies){
         this.navigationManager = navigationManager;
         this.movies = movies;
@@ -27,6 +25,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        This parent is the Recycler View and its context is the main activity.
         View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.single_movie_item_design, parent, false);
         return new MovieViewHolder(v);
@@ -37,7 +36,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         Movie m = movies.get(position);
         holder.tvMovieTitle.setText(m.getTitle());
         holder.tVMovieGenre.setText(m.getGenre());
-        holder.ivMoviePoster.setImageResource(m.getPosterSrc());
+
+//        itemView's context is also MainActivity as we are the ones that set it using from()
+        Context context = holder.itemView.getContext();
+        int posterId = context.getResources()
+                .getIdentifier(m.getPosterSrc(), "drawable", context.getPackageName());
+
+        holder.ivMoviePoster.setImageResource(posterId);
 
         holder.btnBookSeats.setOnClickListener(v -> {
             navigationManager.openChooseSeats(m);

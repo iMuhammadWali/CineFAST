@@ -151,6 +151,14 @@
             android:textAppearance="@style/RedButtonTextStyle"
             android:background="@drawable/app_red_button"/>
 
+        <ProgressBar
+            android:id="@+id/pbSignup"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -172,6 +180,5 @@
                 android:textAppearance="@style/LoginAndSignupTextStyle"
                 android:textColor="@color/blue"/>
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>
