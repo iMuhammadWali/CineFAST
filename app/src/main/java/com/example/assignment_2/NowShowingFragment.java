@@ -52,19 +52,17 @@ public class NowShowingFragment extends Fragment {
                 String title = obj.getString("title");
                 String genre = obj.getString("genre");
                 String trailer = obj.getString("trailerLink");
-
+                String bannerSrc = obj.getString("bannerSrc");
                 String posterName = obj.getString("posterSrc");
 
-                int posterId = requireActivity()
-                        .getResources()
-                        .getIdentifier(posterName, "drawable", requireActivity().getPackageName());
 
                 Movie movie = new Movie(
                         posterName,
                         title,
                         genre,
                         trailer,
-                        false
+                        false,
+                        bannerSrc
                 );
 
                 movies.add(movie);

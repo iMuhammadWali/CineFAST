@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.fContainer), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(0, 0, 0, systemBars.bottom);
             return insets;
         });
 
@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
 
         DatabaseReference ref = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("users").child(FirebaseAuth.getInstance().getUid());
+                .child("users")
+                .child(FirebaseAuth.getInstance().getUid());
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -118,9 +119,10 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
                     FirebaseAuth.getInstance().signOut();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                     return true;
                 }
-                // I am not adding to back stack here as I dont think it is viable.
+
                 if (selected != null){
                     manager.beginTransaction()
                             .replace(R.id.fContainer, selected)

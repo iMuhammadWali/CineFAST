@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Movie implements Serializable {
     String posterSrc;
+    String bannerSrc;
     String title;
     String genre;
     String trailerLink;
@@ -16,6 +17,7 @@ public class Movie implements Serializable {
     public String getPosterSrc(){
         return posterSrc;
     }
+    public String getBannerSrc(){return bannerSrc;}
     public String getTitle() {
         return title;
     }
@@ -46,11 +48,12 @@ public class Movie implements Serializable {
     public float getTicketPrice() {
         return ticketPrice;
     }
-    public Movie(String posterSrc, String title, String genre, String trailerLink, boolean isComingSoon) {
+    public Movie(String posterSrc, String title, String genre, String trailerLink, boolean isComingSoon, String bannerSrc) {
         this.posterSrc = posterSrc;
         this.title = title;
         this.genre = genre;
         this.trailerLink = trailerLink;
         this.isComingSoon = isComingSoon;
+        this.bannerSrc = bannerSrc;
     }
 }

@@ -4,24 +4,28 @@
       "title": "Detective Conan: One-Eyed Flashback",
       "genre": "Mystery / Action",
       "posterSrc": "movie_detective_conan",
+      "bannerSrc": "movie_detective_conan_banner",
       "trailerLink": "https://youtu.be/OhamdzseR4o?si=8y_G94W9dqdBV2ep"
     },
     {
       "title": "Dragon Ball Super: Broly",
       "genre": "Action",
       "posterSrc": "movie_dragon_ball",
+      "bannerSrc" : "movie_dragon_ball_banner",
       "trailerLink": "https://youtu.be/FHgm89hKpXU?si=y8orMhYsxCicwpO-"
     },
     {
       "title": "Before Sunset",
       "genre": "Romance",
       "posterSrc": "movie_before_sunset",
+      "bannerSrc" : "movie_before_sunset_banner",
       "trailerLink": "https://youtu.be/oI3UuneLcyU?si=30Zy3ehH4wKTI9-r"
     },
     {
       "title": "Dune",
       "genre": "Action",
       "posterSrc": "movie_dune",
+      "bannerSrc" : "movie_dune_banner",
       "trailerLink": "https://youtu.be/8g18jFHCLXk?si=AT1fCnp5GGmdsS0W"
     }
   ],
@@ -30,18 +34,21 @@
       "title": "Detective Conan: Fallen Angel of the Highway",
       "genre":"Action / Mystery",
       "posterSrc": "movie_detective_conan_coming_soon",
+      "bannerSrc" : "movie_detective_conan_coming_soon_banner",
       "trailerLink": ""
     },
     {
       "title": "That time I got Reincarnated as a slime the Movie: Tears of the Azure Sea",
       "genre":"Action / Comedy",
       "posterSrc": "movie_slime_coming_soon",
+      "bannerSrc" : "",
       "trailerLink": ""
     },
     {
       "title": "Sound! Euphonium The Final Movie Part 1",
       "genre":"Action",
       "posterSrc": "movie_sound_euphonium_coming_soon",
+      "bannerSrc" : "movie_sound_euphonium_coming_soon_banner",
       "trailerLink": ""
     }
   ]

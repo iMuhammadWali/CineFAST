@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     EditText etEmail, etPassword;
     TextView tvEmailError, tvPasswordError;
+    ProgressBar pbLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,26 +63,30 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         btnLogin.setOnClickListener((v)->{
+            btnLogin.setVisibility(View.GONE);
+            pbLogin.setVisibility(View.VISIBLE);
             clearErrors();
             boolean hasError = false;
             String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9+_.-]+\\.[A-Za-z]{2,}$";
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
             if (!email.matches(emailPattern)){
-                showError(tvEmailError, "Email address must be of the form: name@example.com");
+//                showError(tvEmailError, "Email address must be of the form: name@example.com");
+                tvEmailError.setText("Email address must be of the form: name@example.com");
+                tvEmailError.setVisibility(View.VISIBLE);
                 hasError = true;
             }
 
             if (email.isEmpty()) {
-//                tvEmailError.setText("Email field must not be empty");
-//                tvEmailError.setVisibility(View.VISIBLE);
-                showError(tvEmailError, "Email field must not be empty");
+                tvEmailError.setText("Email field must not be empty");
+                tvEmailError.setVisibility(View.VISIBLE);
+//                showError(tvEmailError, "Email field must not be empty");
                 hasError = true;
             }
             if (password.isEmpty()) {
-//                tvPasswordError.setText("Password field must not be empty");
-//                tvPasswordError.setVisibility(View.VISIBLE);
-                showError(tvPasswordError, "Email field must not be empty");
+                tvPasswordError.setText("Password field must not be empty");
+                tvPasswordError.setVisibility(View.VISIBLE);
+//                showError(tvPasswordError, "Email field must not be empty");
                 hasError = true;
             }
 
@@ -90,10 +96,13 @@ public class LoginActivity extends AppCompatActivity {
                     addOnCompleteListener(this, (task)->{
                         if (task.isSuccessful()){
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
                         }
                         else {
                             Toast.makeText(this, Objects.requireNonNull(task.getException()).toString(), Toast.LENGTH_SHORT).show();
                         }
+                        btnLogin.setVisibility(View.VISIBLE);
+                        pbLogin.setVisibility(View.GONE);
                     });
         });
     }
@@ -107,10 +116,11 @@ public class LoginActivity extends AppCompatActivity {
 
         tvEmailError = findViewById(R.id.tvEmailError);
         tvPasswordError = findViewById(R.id.tvPasswordError);
+        pbLogin = findViewById(R.id.pbLogin);
     }
     private void clearErrors(){
-        hideError(tvEmailError);
-        hideError(tvPasswordError);
+        tvEmailError.setVisibility(View.GONE);
+        tvPasswordError.setVisibility(View.GONE);
     }
     private void showError(TextView tv, String msg) {
         tv.setText(msg);
@@ -121,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                 .setDuration(200)
                 .start();
     }
-
     private void hideError(TextView tv) {
         tv.animate()
                 .alpha(0f)

@@ -90,15 +90,27 @@ public class ChooseSeatsFragment extends Fragment {
         return Math.round((float) dp * density);
     }
     private void setupUi(View view){
-        int posterId = requireActivity()
-                .getResources()
-                .getIdentifier(movie.getPosterSrc(), "drawable", requireActivity().getPackageName());
 
-        ivMoviePoster.setImageResource(posterId);
+        String bannerSrc = movie.getBannerSrc();
+        if (bannerSrc.isEmpty()){
+            int posterId = requireActivity()
+                    .getResources()
+                    .getIdentifier(movie.getPosterSrc(), "drawable", requireActivity().getPackageName());
+
+            ivMoviePoster.setImageResource(posterId);
+
+        }
+        else {
+            int bannerId = requireActivity()
+                    .getResources()
+                    .getIdentifier(bannerSrc, "drawable", requireActivity().getPackageName());
+            ivMoviePoster.setImageResource(bannerId);
+        }
         if (selectedSeats.isEmpty()){
             btnBookSeats.setEnabled(false);
             btnProceedToSnacks.setEnabled(false);
         }
+
 
         tvMovieTitle.setText(movie.getTitle());
 

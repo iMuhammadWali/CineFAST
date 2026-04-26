@@ -78,15 +78,20 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         btnSignup.setOnClickListener(v -> {
+            boolean hasError = false;
             clearErrors();
             pbSignup.setVisibility(View.VISIBLE);
             btnSignup.setVisibility(View.GONE);
             String name = etName.getText().toString().trim();
+            String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9+_.-]+\\.[A-Za-z]{2,}$";
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
+            if (!email.matches(emailPattern)){
+                tvEmailError.setText("Email address must be of the form: name@example.com");
+                tvEmailError.setVisibility(View.VISIBLE);
+                hasError = true;
+            }
             String confirmPassword = etConfirmPassword.getText().toString().trim();
-
-            boolean hasError = false;
 
             if (name.isEmpty()) {
                 tvNameError.setText("Name field must not be empty");

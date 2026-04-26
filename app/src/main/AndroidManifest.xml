@@ -16,6 +16,13 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,14 +31,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnboardingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SplashActivity"
-            android:exported="false"></activity>
-        <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false">
+
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

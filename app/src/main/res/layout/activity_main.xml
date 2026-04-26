@@ -15,22 +15,23 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="25dp"
+            android:paddingTop="16dp"
             android:background="@color/black">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextAppearance="@style/ToolbarTitleStyle"
-                app:titleCentered="true"/>
+                app:titleCentered="true"
+                app:titleTextAppearance="@style/ToolbarTitleStyle"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
+            android:id="@+id/fContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/fContainer"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -42,6 +43,9 @@
         android:background="@color/dark_grey"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"
-        app:itemTextColor="@color/nav_item_color"/>
-
+        app:itemTextColor="@color/nav_item_color"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemBackground="@drawable/nav_item_background"
+        app:dividerColor="@color/white"
+        app:itemShapeFillColor="@color/green" />
 </androidx.drawerlayout.widget.DrawerLayout>

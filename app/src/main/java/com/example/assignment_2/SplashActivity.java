@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SplashActivity extends AppCompatActivity {
     ImageView ivLogo;
     Animation spin;
@@ -39,9 +41,15 @@ public class SplashActivity extends AppCompatActivity {
         ivLogo.startAnimation(spin);
     }
     private void moveToOnboarding(){
-        new Handler().postDelayed(()->{
+        new Handler().postDelayed(()-> {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null){
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            }
+            else {
                 startActivity(new Intent(this, OnboardingActivity.class));
                 finish();
+            }
         }, 2000);
     }
 }
