@@ -117,7 +117,7 @@ public class MyBookingsFragment extends Fragment implements MyBookingListAdapter
                 .child(bookingId)
                 .removeValue()
                 .addOnSuccessListener(unused -> {
-                    // Nothing to add here
+                    // Nothing to add here nor in the onFailure listerner as well
                 });
     }
 }
