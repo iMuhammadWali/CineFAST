@@ -1,15 +1,22 @@
 package com.example.assignment_2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -115,11 +122,20 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                     getSupportActionBar().setTitle("My Bookings");
                 }
-                else if (id == R.id.navLogout){
-                    FirebaseAuth.getInstance().signOut();
+                else if (id == R.id.navLogout) {
                     drawerLayout.closeDrawer(GravityCompat.START);
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
+                    showConfirmDialog(
+                            MainActivity.this,
+                            "Logout",
+                            "Are you sure you want to logout?",
+                            "Logout",
+                            0,
+                            () -> {
+                                FirebaseAuth.getInstance().signOut();
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                                finish();
+                            }
+                    );
                     return true;
                 }
 
@@ -227,5 +243,49 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
                 getSupportActionBar().setTitle(title);
             }
         });
+    }
+    public static void showConfirmDialog(
+            Context context,
+            String title,
+            String message,
+            String confirmText,
+            int iconRes,
+            Runnable onConfirm) {
+
+        View view = LayoutInflater.from(context).inflate(R.layout.app_dialog_design, null);
+
+        ImageView ivIcon = view.findViewById(R.id.ivDialogIcon);
+        TextView tvTitle = view.findViewById(R.id.tvDialogTitle);
+        TextView tvMessage = view.findViewById(R.id.tvDialogMessage);
+        TextView tvCancel = view.findViewById(R.id.tvDialogCancel);
+        TextView tvConfirm = view.findViewById(R.id.tvDialogConfirm);
+
+        tvTitle.setText(title);
+        tvMessage.setText(message);
+        tvConfirm.setText(confirmText);
+
+        if (iconRes != 0) {
+            ivIcon.setVisibility(View.VISIBLE);
+            ivIcon.setImageResource(iconRes);
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setView(view)
+                .create();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        tvCancel.setOnClickListener(v -> dialog.dismiss());
+        tvConfirm.setOnClickListener(v -> {
+            dialog.dismiss();
+            onConfirm.run();
+        });
+
+        dialog.show();
+
+        // Set width after show() so the window is ready
+//        dialog.getWindow().setLayout(
+//                (int)(context.getResources().getDisplayMetrics().widthPixels * 0.85),
+//                ViewGroup.LayoutParams.WRAP_CONTENT );
     }
 }

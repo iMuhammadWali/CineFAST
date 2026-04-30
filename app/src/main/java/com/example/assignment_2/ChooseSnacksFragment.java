@@ -41,12 +41,10 @@ public class ChooseSnacksFragment extends Fragment implements SnackListAdapter.S
         // Required empty public constructor
     }
 
-    private void populateSnacks(){
-//        TODO: Load these from SQLite.
-        snacks.add(new Snack(R.drawable.snacks_popcorn, "Popcorn", "Large / Buttered", 8.99f));
-        snacks.add(new Snack(R.drawable.snacks_nachos, "Nachos", "With Cheese Dip", 7.99f));
-        snacks.add(new Snack(R.drawable.snacks_soft_drink, "Soft Drink", "Large / Any Flavor", 5.99f));
-        snacks.add(new Snack(R.drawable.snacks_lays, "Lays", "Family Pack", 1.99f));
+    private void populateSnacks() {
+        DatabaseManager dbManager = new DatabaseManager(requireContext());
+        snacks.clear();
+        snacks.addAll(dbManager.getAllSnacks());
     }
 
     @Override

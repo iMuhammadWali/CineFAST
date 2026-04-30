@@ -43,9 +43,8 @@
         android:background="@color/dark_grey"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu"
+        android:theme="@style/NavThemeOverlay"
         app:itemTextColor="@color/nav_item_color"
-        app:itemIconTint="@color/nav_item_color"
-        app:itemBackground="@drawable/nav_item_background"
-        app:dividerColor="@color/white"
-        app:itemShapeFillColor="@color/green" />
+        app:itemIconTint="@color/nav_item_color" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

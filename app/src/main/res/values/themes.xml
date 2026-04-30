@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.Assignment_2" parent="Base.Theme.Assignment_2" />
+
+    <style name="NavThemeOverlay" parent="">
+        <item name="colorSecondaryContainer">@color/light_grey</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
+    </style>
+
 </resources>

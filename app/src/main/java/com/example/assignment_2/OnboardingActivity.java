@@ -30,7 +30,7 @@ public class OnboardingActivity extends AppCompatActivity {
     }
     private void applyListeners(){
         btnGetStarted.setOnClickListener((v)->{
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
     }
