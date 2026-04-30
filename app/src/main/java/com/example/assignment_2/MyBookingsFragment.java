@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class MyBookingsFragment extends Fragment {
+public class MyBookingsFragment extends Fragment implements MyBookingListAdapter.OnDeleteClickListener {
 
     private ArrayList<MyBooking> myBookings;
     RecyclerView recyclerView;
@@ -59,7 +59,7 @@ public class MyBookingsFragment extends Fragment {
 
         myBookings = new ArrayList<>();
         recyclerView = view.findViewById(R.id.recyclerView);
-        adapter = new MyBookingListAdapter(requireContext(), myBookings);
+        adapter = new MyBookingListAdapter(requireContext(), myBookings, this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
@@ -77,11 +77,12 @@ public class MyBookingsFragment extends Fragment {
                 myBookings.clear();
                 for (DataSnapshot bookingSnap : snapshot.getChildren()){Long numTickets = bookingSnap.child("numTickets").getValue(Long.class);
                     Long timestamp = bookingSnap.child("timestamp").getValue(Long.class);
-
+                    String id = bookingSnap.getKey();
                     String title = bookingSnap.child("title").getValue(String.class);
                     String posterSrc = bookingSnap.child("posterSrc").getValue(String.class);
 
                     MyBooking booking = new MyBooking(
+                            id,
                             title,
                             posterSrc,
                             String.valueOf(numTickets),
@@ -103,5 +104,20 @@ public class MyBookingsFragment extends Fragment {
                 recyclerView.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void ondeleteClickListener(MyBooking booking) {
+        String userId = mAuth.getCurrentUser().getUid();
+
+        String bookingId = booking.getId();
+
+        mDatabase.getReference("bookings")
+                .child(userId)
+                .child(bookingId)
+                .removeValue()
+                .addOnSuccessListener(unused -> {
+                    // Nothing to add here
+                });
     }
 }

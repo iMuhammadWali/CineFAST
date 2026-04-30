@@ -15,9 +15,11 @@ import java.util.ArrayList;
 public class MyBookingListAdapter extends RecyclerView.Adapter<MyBookingListAdapter.MyBookingViewHolder> {
     private Context context;
     private ArrayList<MyBooking> myBookings;
-    public MyBookingListAdapter(Context context, ArrayList<MyBooking> myBookings){
+    private OnDeleteClickListener listener;
+    public MyBookingListAdapter(Context context, ArrayList<MyBooking> myBookings, OnDeleteClickListener listener){
         this.context = context;
         this.myBookings = myBookings;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +40,10 @@ public class MyBookingListAdapter extends RecyclerView.Adapter<MyBookingListAdap
         holder.tvMovieTitle.setText(booking.getTitle());
         holder.tvNumTickets.setText(booking.getNumTickets() + "Tickets");
         holder.tvTimestamp.setText(booking.getTimestamp());
+
+        holder.ivDelete.setOnClickListener((v)->{
+            listener.ondeleteClickListener(booking);
+        });
     }
 
     @Override
@@ -58,5 +64,8 @@ public class MyBookingListAdapter extends RecyclerView.Adapter<MyBookingListAdap
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
             tvNumTickets = itemView.findViewById(R.id.tvNumTickets);
         }
+    }
+    public interface OnDeleteClickListener {
+        public void ondeleteClickListener(MyBooking booking);
     }
 }

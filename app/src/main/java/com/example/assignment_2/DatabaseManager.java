@@ -48,7 +48,7 @@ public class DatabaseManager {
                 null,
                 null);
 
-        if (cursor != null && cursor.moveToFirst()){
+        if (cursor.moveToFirst()){
             do {
                 int index_id = cursor.getColumnIndex(COLUMN_ID);
                 int index_name = cursor.getColumnIndex(COLUMN_NAME);
