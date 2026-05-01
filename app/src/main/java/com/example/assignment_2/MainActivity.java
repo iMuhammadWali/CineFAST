@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
                 .setView(view)
                 .create();
 
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         tvCancel.setOnClickListener(v -> dialog.dismiss());
         tvConfirm.setOnClickListener(v -> {
