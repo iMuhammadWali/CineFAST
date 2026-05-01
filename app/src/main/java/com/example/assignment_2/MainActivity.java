@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
                 .setView(view)
                 .create();
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         tvCancel.setOnClickListener(v -> dialog.dismiss());
         tvConfirm.setOnClickListener(v -> {
@@ -283,9 +283,6 @@ public class MainActivity extends AppCompatActivity implements NavigationManager
 
         dialog.show();
 
-        // Set width after show() so the window is ready
-//        dialog.getWindow().setLayout(
-//                (int)(context.getResources().getDisplayMetrics().widthPixels * 0.85),
-//                ViewGroup.LayoutParams.WRAP_CONTENT );
     }
+
 }

@@ -4,15 +4,18 @@ public class MyBooking {
     String id;
     String title;
     String posterSrc;
-    String numTickets;
-    String timestamp;
+    int numTickets;
+    long timestampMillis;
+    String formattedTimestamp;
 
-    public MyBooking(String id, String title, String posterSrc, String numTickets, String timestamp) {
+    public MyBooking(String id, String title, String posterSrc,
+                     int numTickets, long timestampMillis, String formattedTimestamp) {
         this.id = id;
         this.title = title;
         this.posterSrc = posterSrc;
         this.numTickets = numTickets;
-        this.timestamp= timestamp;
+        this.timestampMillis = timestampMillis;
+        this.formattedTimestamp = formattedTimestamp;
     }
     public String getId() {
         return id;
@@ -33,16 +36,14 @@ public class MyBooking {
         this.title = title;
     }
 
-    public String getNumTickets() {
+    public int getNumTickets() {
         return numTickets;
     }
 
-    public void setNumTickets(String numTickets) {
+    public void setNumTickets(int numTickets) {
         this.numTickets = numTickets;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
-
+    public long getTimestampMillis() { return timestampMillis; }
+    public String getFormattedTimestamp() { return formattedTimestamp; }
 }

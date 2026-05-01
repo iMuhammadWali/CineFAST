@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class TicketSummaryFragment extends Fragment {
@@ -82,7 +83,7 @@ public class TicketSummaryFragment extends Fragment {
         tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
         btnConfirm = view.findViewById(R.id.btnConfirm);
     }
-//    TODO: Make setupUi reusable.
+//    TODO: Make setupUi modular.
     private void setupUi(){
         float totalPrice = 0f;
         tvMovieTitle.setText(movie.getTitle());
@@ -123,7 +124,20 @@ public class TicketSummaryFragment extends Fragment {
             data.put("posterSrc", movie.getPosterSrc());
             data.put("title", movie.getTitle());
             data.put("numTickets", selectedSeats.size());
-            data.put("timestamp", System.currentTimeMillis());
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.set(Calendar.HOUR_OF_DAY, 21);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            long bookingTime = calendar.getTimeInMillis();
+
+            data.put("timestamp", bookingTime);
 
             mReference.child("bookings")
                     .child(userId)

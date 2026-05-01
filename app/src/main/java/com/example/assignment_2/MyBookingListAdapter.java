@@ -32,18 +32,29 @@ public class MyBookingListAdapter extends RecyclerView.Adapter<MyBookingListAdap
     @Override
     public void onBindViewHolder(@NonNull MyBookingViewHolder holder, int position) {
         MyBooking booking = myBookings.get(position);
-        int posterId = context
-                .getResources()
+
+        int posterId = context.getResources()
                 .getIdentifier(booking.getPosterSrc(), "drawable", context.getPackageName());
 
         holder.ivPoster.setImageResource(posterId);
         holder.tvMovieTitle.setText(booking.getTitle());
-        holder.tvNumTickets.setText(booking.getNumTickets() + "Tickets");
-        holder.tvTimestamp.setText(booking.getTimestamp());
+        holder.tvNumTickets.setText(booking.getNumTickets() + " Tickets");
+        holder.tvTimestamp.setText(booking.getFormattedTimestamp());
 
-        holder.ivDelete.setOnClickListener((v)->{
-            listener.ondeleteClickListener(booking);
-        });
+        long currentTime = System.currentTimeMillis();
+        long bookingTime = booking.getTimestampMillis();
+
+        if (bookingTime <= currentTime) {
+            holder.ivDelete.setAlpha(0.3f);
+            holder.ivDelete.setEnabled(false);
+            holder.ivDelete.setOnClickListener(null);
+        } else {
+            holder.ivDelete.setAlpha(1f);
+            holder.ivDelete.setEnabled(true);
+            holder.ivDelete.setOnClickListener(v ->
+                    listener.ondeleteClickListener(booking)
+            );
+        }
     }
 
     @Override
