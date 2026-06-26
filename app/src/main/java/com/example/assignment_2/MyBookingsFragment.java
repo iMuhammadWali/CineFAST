@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
+// TODO: fetch booked seats from firebase and mark them red for upcoming users.
 public class MyBookingsFragment extends Fragment implements MyBookingListAdapter.OnDeleteClickListener {
 
     private ArrayList<MyBooking> myBookings;
@@ -185,7 +186,5 @@ public class MyBookingsFragment extends Fragment implements MyBookingListAdapter
         });
 
         dialog.show();
-
     }
-
 }

@@ -17,12 +17,9 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-// TODO: Understand the lifecycle of Fragment [Done]
-// TODO: Make the screen work for isComingSoonMovies [Done]
 public class ChooseSeatsFragment extends Fragment {
     TextView tvMovieTitle;
     AppCompatButton btnBookSeats, btnProceedToSnacks;
@@ -60,19 +57,27 @@ public class ChooseSeatsFragment extends Fragment {
 
     public ChooseSeatsFragment() {
         // Required empty public constructor
+
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_choose_seats, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
         setupUi(view);
+
+        // I can populate Selected Seats in this from Firebase.
+        // But an edge case I can think of is race condition in real world scenarios.
+
     }
+
     private void init(View v){
         llMovieInformation = v.findViewById(R.id.llMovieInformation);
         ivMoviePoster = v.findViewById(R.id.ivMoviePoster);
@@ -81,7 +86,7 @@ public class ChooseSeatsFragment extends Fragment {
         btnBookSeats = v.findViewById(R.id.btnBookSeats);
         btnProceedToSnacks = v.findViewById(R.id.btnProceedToSnacks);
 
-        //Setup the instruction buttons.
+        // Set up the instruction buttons.
         v.findViewById(R.id.vBooked).setEnabled(false);
         v.findViewById(R.id.vYours).setSelected(true);
     }
@@ -90,7 +95,6 @@ public class ChooseSeatsFragment extends Fragment {
         return Math.round((float) dp * density);
     }
     private void setupUi(View view){
-
         String bannerSrc = movie.getBannerSrc();
         if (bannerSrc.isEmpty()){
             int posterId = requireActivity()
@@ -111,10 +115,9 @@ public class ChooseSeatsFragment extends Fragment {
             btnProceedToSnacks.setEnabled(false);
         }
 
-
         tvMovieTitle.setText(movie.getTitle());
 
-        if (movie.isComingSoon){
+        if (movie.getIsComingSoon()){
             btnBookSeats.setEnabled(false);
 
             btnBookSeats.setText("Coming Soon");
@@ -145,28 +148,35 @@ public class ChooseSeatsFragment extends Fragment {
 
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
+                // Create a seat
                 View v = new View(requireActivity());
+
+                // Set the layout
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = dpToPx(22);
                 params.height= dpToPx(22);
                 params.setMargins(dpToPx(4), dpToPx(4), dpToPx(4), dpToPx(4));
                 v.setLayoutParams(params);
+
+                // Add the seat in the grid.
                 glSeating.addView(v);
 
+                // do not show the seat if this place is not a valid seating place
                 if (j == 4 || (i == 0 && j == 0) || (i == 0 && j == cols - 1)
                         || (i == rows - 1 && j == 0) || (i == rows - 1 && j == cols - 1)) {
-                    // do not show the seat if this place is not a valid seating place
                     continue;
                 }
 
-                if (i == 2 || movie.isComingSoon){
-                    v.setEnabled(false);
-                }
                 v.setBackgroundResource(R.drawable.app_choose_seats_seat);
                 String seatName = "Row " + (i + 1) + " Seat " + (j + 1);
                 v.setTag(seatName);
                 v.setSelected(selectedSeats.contains(seatName));
-                if (!movie.isComingSoon) {
+
+                // If the movie is a comingSoon movie, no seat is available.
+                if (movie.isComingSoon){
+                    v.setEnabled(false);
+                }
+                else {
                     v.setOnClickListener(clickedView -> {
                         String seat = (String) clickedView.getTag();
                         if (clickedView.isSelected()) {
