@@ -17,6 +17,13 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -25,6 +32,7 @@ public class ChooseSeatsFragment extends Fragment {
     AppCompatButton btnBookSeats, btnProceedToSnacks;
     GridLayout glSeating;
     ArrayList<String> selectedSeats;
+    ArrayList<String> alreadySelectedSeats;
     Movie movie;
     NavigationManager navigationManager;
     LinearLayout llMovieInformation;
@@ -53,6 +61,7 @@ public class ChooseSeatsFragment extends Fragment {
             movie = (Movie) args.getSerializable(ARG_PARAM1);
         }
         selectedSeats = new ArrayList<>();
+        alreadySelectedSeats = new ArrayList<>();
     }
 
     public ChooseSeatsFragment() {
@@ -71,10 +80,37 @@ public class ChooseSeatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);
-        setupUi(view);
 
-        // I can populate Selected Seats in this from Firebase.
-        // But an edge case I can think of is race condition in real world scenarios.
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference().child("Seats").child(movie.getTitle());
+
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot data: snapshot.getChildren()){
+                        for (DataSnapshot d : data.getChildren()){
+                            Integer row = d.child("row").getValue(Integer.class);
+                            Integer col = d.child("col").getValue(Integer.class);
+                            String seat = "Row " + row + " Seat " + col;
+                            alreadySelectedSeats.add(seat);
+                        }
+                    }
+                }
+                createSeatsGrid();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // I don't know when is this function called.
+            }
+        });
+        setupUi(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 
@@ -139,7 +175,6 @@ public class ChooseSeatsFragment extends Fragment {
                 navigationManager.openSnacks(movie, selectedSeats);
             });
         }
-        createSeatsGrid();
     }
     private void createSeatsGrid(){
         glSeating.removeAllViews();
@@ -170,31 +205,28 @@ public class ChooseSeatsFragment extends Fragment {
                 v.setBackgroundResource(R.drawable.app_choose_seats_seat);
                 String seatName = "Row " + (i + 1) + " Seat " + (j + 1);
                 v.setTag(seatName);
-                v.setSelected(selectedSeats.contains(seatName));
-
-                // If the movie is a comingSoon movie, no seat is available.
-                if (movie.isComingSoon){
+                if (alreadySelectedSeats.contains(seatName) || movie.getIsComingSoon()){
                     v.setEnabled(false);
+                    continue;
                 }
-                else {
-                    v.setOnClickListener(clickedView -> {
-                        String seat = (String) clickedView.getTag();
-                        if (clickedView.isSelected()) {
-                            clickedView.setSelected(false);
-                            selectedSeats.remove(seat);
-                        } else {
-                            clickedView.setSelected(true);
-                            selectedSeats.add(seat);
-                        }
-                        if (selectedSeats.isEmpty()) {
-                            btnBookSeats.setEnabled(false);
-                            btnProceedToSnacks.setEnabled(false);
-                        } else {
-                            btnBookSeats.setEnabled(true);
-                            btnProceedToSnacks.setEnabled(true);
-                        }
-                    });
-                }
+                v.setSelected(selectedSeats.contains(seatName));
+                v.setOnClickListener(clickedView -> {
+                    String seat = (String) clickedView.getTag();
+                    if (clickedView.isSelected()) {
+                        clickedView.setSelected(false);
+                        selectedSeats.remove(seat);
+                    } else {
+                        clickedView.setSelected(true);
+                        selectedSeats.add(seat);
+                    }
+                    if (selectedSeats.isEmpty()) {
+                        btnBookSeats.setEnabled(false);
+                        btnProceedToSnacks.setEnabled(false);
+                    } else {
+                        btnBookSeats.setEnabled(true);
+                        btnProceedToSnacks.setEnabled(true);
+                    }
+                });
             }
         }
     }
